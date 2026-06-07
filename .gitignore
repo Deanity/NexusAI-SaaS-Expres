@@ -1,0 +1,28 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Log files
+*.log
+pnpm-debug.log*
+
+# Coverage directory
+coverage/
+.nyc_output/
+
+# dotenv environment variable files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Gemini rule file (custom ignore)
+GEMINI.md
+
+# Operating System files
+.DS_Store
+Thumbs.db
