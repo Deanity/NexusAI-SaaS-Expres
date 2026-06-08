@@ -5,6 +5,8 @@ declare global {
     interface Request {
       user?: JwtPayload;
       authMethod?: 'jwt' | 'apikey';
+      apiKeyId?: string;
+      apiKeyScopes?: string[];
     }
   }
 }

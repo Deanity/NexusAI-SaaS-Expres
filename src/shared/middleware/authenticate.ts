@@ -3,9 +3,15 @@ import { verifyAccessToken } from '@/shared/utils/token';
 import { AppError } from '@/shared/errors/AppError';
 import { findUserById } from '@/modules/user/user.repository';
 import { asyncHandler } from '@/shared/utils/asyncHandler';
+import { authenticateApiKey } from './authenticateApiKey';
 
 export const authenticate: RequestHandler = asyncHandler(
-  async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    // Delegate to API Key auth if x-api-key header is present
+    if (req.headers['x-api-key']) {
+      return authenticateApiKey(req, res, next);
+    }
+
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new AppError('Access token is missing or invalid', 401, 'TOKEN_INVALID');

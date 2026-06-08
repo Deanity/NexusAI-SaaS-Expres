@@ -16,6 +16,7 @@ import creditRoutes from '@/modules/credit/credit.routes';
 import subscriptionRoutes from '@/modules/subscription/subscription.routes';
 import aiRoutes from '@/modules/ai/ai.routes';
 import conversationRoutes from '@/modules/conversation/conversation.routes';
+import apiKeyRoutes from '@/modules/apikey/apiKey.routes';
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/api/v1/credits', creditRoutes);
 app.use('/api/v1', subscriptionRoutes);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/conversations', conversationRoutes);
+app.use('/api/v1/api-keys', apiKeyRoutes);
 
 // 404 handler for unknown routes
 app.use((req: Request, _res: Response, next: NextFunction): void => {
