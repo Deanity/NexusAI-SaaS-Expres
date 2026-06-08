@@ -14,6 +14,8 @@ import authRoutes from '@/modules/auth/auth.routes';
 import userRoutes from '@/modules/user/user.routes';
 import creditRoutes from '@/modules/credit/credit.routes';
 import subscriptionRoutes from '@/modules/subscription/subscription.routes';
+import aiRoutes from '@/modules/ai/ai.routes';
+import conversationRoutes from '@/modules/conversation/conversation.routes';
 
 const app = express();
 
@@ -73,6 +75,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/credits', creditRoutes);
 app.use('/api/v1', subscriptionRoutes);
+app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/conversations', conversationRoutes);
 
 // 404 handler for unknown routes
 app.use((req: Request, _res: Response, next: NextFunction): void => {
