@@ -2,10 +2,7 @@ import crypto from 'crypto';
 import mongoose from 'mongoose';
 import { User, UserDocument } from '@/modules/user/user.model';
 import { Plan, PlanDocument } from '@/modules/subscription/plan.model';
-import {
-  Subscription,
-  SubscriptionStatus,
-} from '@/modules/subscription/subscription.model';
+import { Subscription, SubscriptionStatus } from '@/modules/subscription/subscription.model';
 import { UsageEvent, UsageEventType } from '@/modules/analytics/usageEvent.model';
 import { Message } from '@/modules/conversation/message.model';
 import { CreditAction } from '@/modules/credit/creditLedger.model';
@@ -175,7 +172,10 @@ export const createPlan = async (planData: Partial<PlanDocument>): Promise<PlanD
   return plan;
 };
 
-export const updatePlan = async (id: string, planData: Partial<PlanDocument>): Promise<PlanDocument> => {
+export const updatePlan = async (
+  id: string,
+  planData: Partial<PlanDocument>
+): Promise<PlanDocument> => {
   const oldPlan = await Plan.findById(id);
   if (!oldPlan) {
     throw new AppError('Plan not found', 404, 'NOT_FOUND');
@@ -384,8 +384,15 @@ export const getAdminUsersBreakdown = async (
     },
   ]);
 
-  const breakdownRaw = result[0]?.data || [];
-  const breakdown: UserUsageBreakdownItem[] = breakdownRaw.map((item: any) => ({
+  const breakdownRaw = (result[0]?.data || []) as Array<{
+    userId: mongoose.Types.ObjectId;
+    name?: string;
+    email?: string;
+    messagesCount: number;
+    tokensUsed: number;
+    creditsUsed: number;
+  }>;
+  const breakdown: UserUsageBreakdownItem[] = breakdownRaw.map((item) => ({
     userId: item.userId,
     name: item.name || 'Unknown',
     email: item.email || 'unknown@nexusai.dev',

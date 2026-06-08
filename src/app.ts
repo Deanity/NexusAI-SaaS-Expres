@@ -18,6 +18,7 @@ import aiRoutes from '@/modules/ai/ai.routes';
 import conversationRoutes from '@/modules/conversation/conversation.routes';
 import apiKeyRoutes from '@/modules/apikey/apiKey.routes';
 import analyticsRoutes from '@/modules/analytics/analytics.routes';
+import adminRoutes from '@/modules/admin/admin.routes';
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/conversations', conversationRoutes);
 app.use('/api/v1/api-keys', apiKeyRoutes);
 app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 // 404 handler for unknown routes
 app.use((req: Request, _res: Response, next: NextFunction): void => {

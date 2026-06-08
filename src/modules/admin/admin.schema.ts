@@ -29,7 +29,10 @@ export const adjustCreditsSchema = z.object({
 export const createPlanSchema = z.object({
   body: z.object({
     name: z.string().min(1, 'Name is required').max(50),
-    slug: z.string().min(1, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Slug must be kebab-case'),
+    slug: z
+      .string()
+      .min(1, 'Slug is required')
+      .regex(/^[a-z0-9-]+$/, 'Slug must be kebab-case'),
     price: z.number().min(0, 'Price must be greater than or equal to 0'),
     currency: z.enum(['USD', 'IDR']),
     billingCycle: z.enum(['monthly', 'yearly', 'lifetime']),
@@ -49,7 +52,11 @@ export const createPlanSchema = z.object({
 export const updatePlanSchema = z.object({
   body: z.object({
     name: z.string().min(1).max(50).optional(),
-    slug: z.string().min(1).regex(/^[a-z0-9-]+$/, 'Slug must be kebab-case').optional(),
+    slug: z
+      .string()
+      .min(1)
+      .regex(/^[a-z0-9-]+$/, 'Slug must be kebab-case')
+      .optional(),
     price: z.number().min(0).optional(),
     currency: z.enum(['USD', 'IDR']).optional(),
     billingCycle: z.enum(['monthly', 'yearly', 'lifetime']).optional(),
