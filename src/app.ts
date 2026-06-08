@@ -10,6 +10,10 @@ import { checkRedisHealth } from '@/config/redis';
 import { errorHandler } from '@/shared/middleware/errorHandler';
 import { sendSuccess, sendError } from '@/shared/utils/response';
 import { AppError } from '@/shared/errors/AppError';
+import authRoutes from '@/modules/auth/auth.routes';
+import userRoutes from '@/modules/user/user.routes';
+import creditRoutes from '@/modules/credit/credit.routes';
+import subscriptionRoutes from '@/modules/subscription/subscription.routes';
 
 const app = express();
 
@@ -63,6 +67,12 @@ app.get('/health', async (_req: Request, res: Response, next: NextFunction): Pro
     next(error);
   }
 });
+
+// Mount API routes
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/credits', creditRoutes);
+app.use('/api/v1', subscriptionRoutes);
 
 // 404 handler for unknown routes
 app.use((req: Request, _res: Response, next: NextFunction): void => {
