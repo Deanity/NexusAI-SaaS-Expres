@@ -9,13 +9,29 @@ import { User } from '@/modules/user/user.model';
 import { AppError } from '@/shared/errors/AppError';
 import { addCredits } from '@/modules/credit/credit.service';
 import { CreditAction } from '@/modules/credit/creditLedger.model';
+import { redis } from '@/config/redis';
 
 export const getActivePlans = async (): Promise<PlanDocument[]> => {
-  return Plan.find({ isActive: true });
+  const cached = await redis.get('plan:all');
+  if (cached) {
+    return JSON.parse(cached) as PlanDocument[];
+  }
+  const plans = await Plan.find({ isActive: true });
+  await redis.set('plan:all', JSON.stringify(plans), 'EX', 3600);
+  return plans;
 };
 
 export const getPlanBySlug = async (slug: string): Promise<PlanDocument | null> => {
-  return Plan.findOne({ slug, isActive: true });
+  const cacheKey = `plan:${slug}`;
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    return JSON.parse(cached) as PlanDocument | null;
+  }
+  const plan = await Plan.findOne({ slug, isActive: true });
+  if (plan) {
+    await redis.set(cacheKey, JSON.stringify(plan), 'EX', 3600);
+  }
+  return plan;
 };
 
 export const getCurrentSubscription = async (

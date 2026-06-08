@@ -32,6 +32,7 @@ export const chat = asyncHandler(async (req: Request, res: Response): Promise<vo
           stream: true,
           ipAddress,
           userAgent,
+          apiKeyId: req.apiKeyId,
         },
         (chunk) => {
           res.write(`data: ${chunk}\n\n`);
@@ -56,6 +57,7 @@ export const chat = asyncHandler(async (req: Request, res: Response): Promise<vo
       stream: false,
       ipAddress,
       userAgent,
+      apiKeyId: req.apiKeyId,
     });
 
     sendSuccess(res, 200, 'Response generated successfully', {

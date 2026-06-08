@@ -1,8 +1,10 @@
+import mongoose from 'mongoose';
 import { Conversation, ConversationDocument } from '@/modules/conversation/conversation.model';
 import { Message, MessageDocument } from '@/modules/conversation/message.model';
 import { UsageEvent, UsageEventType } from '@/modules/analytics/usageEvent.model';
 import { deductCredits, getBalance } from '@/modules/credit/credit.service';
 import { CreditAction } from '@/modules/credit/creditLedger.model';
+import { redis } from '@/config/redis';
 import { GoogleProvider } from './providers/google.provider';
 import { env } from '@/config/env';
 import { AppError } from '@/shared/errors/AppError';
@@ -18,6 +20,7 @@ export interface ChatOptions {
   stream?: boolean;
   ipAddress: string;
   userAgent: string;
+  apiKeyId?: string;
 }
 
 export interface ChatResult {
@@ -199,15 +202,30 @@ export const handleChat = async (
     tokensUsed: response.tokensUsed,
     creditsUsed: cost,
     conversationId: conversationDoc._id,
-    apiKeyId: null,
+    apiKeyId: options.apiKeyId ? new mongoose.Types.ObjectId(options.apiKeyId) : null,
     ipAddress: options.ipAddress,
     userAgent: options.userAgent,
     timestamp: new Date(),
   });
+
+  // 13. Invalidate analytics cache
+  await invalidateAnalyticsCache(userId);
 
   return {
     conversationId: conversationDoc._id.toString(),
     message: assistantMsg,
     userMessage: userMsg,
   };
+};
+
+export const invalidateAnalyticsCache = async (userId: string): Promise<void> => {
+  const pattern = `analytics:${userId}:*`;
+  let cursor = '0';
+  do {
+    const [newCursor, keys] = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+    cursor = newCursor;
+    if (keys.length > 0) {
+      await redis.del(...keys);
+    }
+  } while (cursor !== '0');
 };
