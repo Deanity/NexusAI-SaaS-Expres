@@ -1,7 +1,17 @@
 import { User, UserDocument } from '@/modules/user/user.model';
+import { redis } from '@/config/redis';
 
 export const findUserById = async (id: string): Promise<UserDocument | null> => {
-  return User.findById(id);
+  const cacheKey = `user:${id}`;
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    return User.hydrate(JSON.parse(cached)) as UserDocument;
+  }
+  const user = await User.findById(id);
+  if (user) {
+    await redis.set(cacheKey, JSON.stringify(user.toObject()), 'EX', 300);
+  }
+  return user;
 };
 
 export const findUserByEmail = async (email: string): Promise<UserDocument | null> => {
@@ -24,5 +34,9 @@ export const updateUser = async (
   id: string,
   data: Partial<UserDocument>
 ): Promise<UserDocument | null> => {
-  return User.findByIdAndUpdate(id, { $set: data }, { new: true });
+  const user = await User.findByIdAndUpdate(id, { $set: data }, { new: true });
+  if (user) {
+    await redis.del(`user:${id}`);
+  }
+  return user;
 };

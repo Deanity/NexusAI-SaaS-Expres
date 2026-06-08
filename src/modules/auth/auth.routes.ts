@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as authController from '@/modules/auth/auth.controller';
 import { validate } from '@/shared/middleware/validate';
 import { authenticate } from '@/shared/middleware/authenticate';
+import { createRateLimiter } from '@/shared/middleware/rateLimiter';
 import {
   registerSchema,
   loginSchema,
@@ -13,8 +14,14 @@ import {
 
 const router = Router();
 
-router.post('/register', validate(registerSchema), authController.register);
-router.post('/login', validate(loginSchema), authController.login);
+const authLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  keyPrefix: 'auth',
+});
+
+router.post('/register', authLimiter, validate(registerSchema), authController.register);
+router.post('/login', authLimiter, validate(loginSchema), authController.login);
 router.post('/refresh', authController.refresh);
 router.post('/logout', authenticate, authController.logout);
 router.post('/logout-all', authenticate, authController.logoutAll);

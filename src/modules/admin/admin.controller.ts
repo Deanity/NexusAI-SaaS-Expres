@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
+import crypto from 'crypto';
 import * as adminService from './admin.service';
 import { sendSuccess } from '@/shared/utils/response';
 import { asyncHandler } from '@/shared/utils/asyncHandler';
 import { parsePagination } from '@/shared/utils/pagination';
+import { redis } from '@/config/redis';
 
 export const getUsers = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { page, limit } = parsePagination(req);
@@ -71,6 +73,15 @@ export const getOverviewAnalytics = asyncHandler(
     const to = toStr ? new Date(toStr) : new Date();
     to.setUTCHours(23, 59, 59, 999);
 
+    // X-Cache calculation
+    const rangeHash = crypto
+      .createHash('md5')
+      .update(`${from.toISOString()}-${to.toISOString()}-admin-overview`)
+      .digest('hex');
+    const cacheKey = `analytics:admin:${rangeHash}`;
+    const cached = await redis.get(cacheKey);
+    res.setHeader('X-Cache', cached ? 'HIT' : 'MISS');
+
     const result = await adminService.getAdminOverview(from, to);
     sendSuccess(res, 200, 'Admin overview analytics retrieved successfully', result);
   }
@@ -87,6 +98,15 @@ export const getUsersAnalytics = asyncHandler(
 
     const to = toStr ? new Date(toStr) : new Date();
     to.setUTCHours(23, 59, 59, 999);
+
+    // X-Cache calculation
+    const rangeHash = crypto
+      .createHash('md5')
+      .update(`${from.toISOString()}-${to.toISOString()}-admin-users`)
+      .digest('hex');
+    const cacheKey = `analytics:admin:${rangeHash}:${page}:${limit}`;
+    const cached = await redis.get(cacheKey);
+    res.setHeader('X-Cache', cached ? 'HIT' : 'MISS');
 
     const result = await adminService.getAdminUsersBreakdown(from, to, page, limit);
     sendSuccess(

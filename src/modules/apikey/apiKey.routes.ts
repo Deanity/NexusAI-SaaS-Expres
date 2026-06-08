@@ -3,11 +3,19 @@ import * as apiKeyController from './apiKey.controller';
 import { authenticate } from '@/shared/middleware/authenticate';
 import { validate } from '@/shared/middleware/validate';
 import { createApiKeySchema, updateApiKeySchema } from './apiKey.schema';
+import { createRateLimiter } from '@/shared/middleware/rateLimiter';
 
 const router = Router();
 
 // Enforce authentication for all API key management routes
 router.use(authenticate);
+
+const apiKeyLimiter = createRateLimiter({
+  windowMs: 60 * 1000, // 1 minute
+  max: 20,
+  keyPrefix: 'api_keys',
+});
+router.use(apiKeyLimiter);
 
 router.post('/', validate(createApiKeySchema), apiKeyController.createKey);
 router.get('/', apiKeyController.listKeys);

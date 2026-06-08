@@ -3,6 +3,7 @@ import * as adminController from './admin.controller';
 import { authenticate } from '@/shared/middleware/authenticate';
 import { authorize } from '@/shared/middleware/authorize';
 import { validate } from '@/shared/middleware/validate';
+import { createRateLimiter } from '@/shared/middleware/rateLimiter';
 import {
   updateStatusSchema,
   updateRoleSchema,
@@ -18,6 +19,13 @@ const router = Router();
 // Apply admin protection to all routes in this router
 router.use(authenticate);
 router.use(authorize(['admin']));
+
+const adminLimiter = createRateLimiter({
+  windowMs: 60 * 1000, // 1 minute
+  max: 500,
+  keyPrefix: 'admin',
+});
+router.use(adminLimiter);
 
 // Users management
 router.get('/users', validate(userQuerySchema), adminController.getUsers);

@@ -20,8 +20,15 @@ import apiKeyRoutes from '@/modules/apikey/apiKey.routes';
 import analyticsRoutes from '@/modules/analytics/analytics.routes';
 import adminRoutes from '@/modules/admin/admin.routes';
 import { initWorkers, setupSchedulers } from '@/jobs/index';
+import { createRateLimiter } from '@/shared/middleware/rateLimiter';
 
 const app = express();
+
+const generalLimiter = createRateLimiter({
+  windowMs: 60 * 1000, // 1 minute
+  max: 200,
+  keyPrefix: 'general',
+});
 
 // Set up logging
 if (env.NODE_ENV !== 'test') {
@@ -76,13 +83,13 @@ app.get('/health', async (_req: Request, res: Response, next: NextFunction): Pro
 
 // Mount API routes
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/credits', creditRoutes);
-app.use('/api/v1', subscriptionRoutes);
+app.use('/api/v1/users', generalLimiter, userRoutes);
+app.use('/api/v1/credits', generalLimiter, creditRoutes);
+app.use('/api/v1', generalLimiter, subscriptionRoutes);
 app.use('/api/v1/ai', aiRoutes);
-app.use('/api/v1/conversations', conversationRoutes);
+app.use('/api/v1/conversations', generalLimiter, conversationRoutes);
 app.use('/api/v1/api-keys', apiKeyRoutes);
-app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/analytics', generalLimiter, analyticsRoutes);
 app.use('/api/v1/admin', adminRoutes);
 
 // 404 handler for unknown routes

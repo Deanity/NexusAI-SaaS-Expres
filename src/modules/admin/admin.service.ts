@@ -108,6 +108,8 @@ export const updateUserStatus = async (id: string, isActive: boolean): Promise<U
     await authRepository.revokeAllUserTokens(id);
   }
 
+  await redis.del(`user:${id}`);
+
   return user;
 };
 
@@ -119,6 +121,8 @@ export const updateUserRole = async (id: string, role: 'user' | 'admin'): Promis
   if (!user) {
     throw new AppError('User not found', 404, 'NOT_FOUND');
   }
+
+  await redis.del(`user:${id}`);
 
   return user;
 };
@@ -157,6 +161,8 @@ export const adjustCredits = async (
   if (!updatedUser) {
     throw new AppError('User not found', 404, 'NOT_FOUND');
   }
+
+  await redis.del(`user:${userId}`);
 
   return updatedUser;
 };
