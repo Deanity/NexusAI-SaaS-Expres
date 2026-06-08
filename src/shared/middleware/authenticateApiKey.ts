@@ -4,6 +4,7 @@ import { ApiKey, ApiKeyDocument } from '@/modules/apikey/apiKey.model';
 import { hashSHA256 } from '@/shared/utils/hash';
 import { AppError } from '@/shared/errors/AppError';
 import { asyncHandler } from '@/shared/utils/asyncHandler';
+import { apiKeyQueue } from '@/config/queue';
 
 export const authenticateApiKey = asyncHandler(
   async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
@@ -65,6 +66,11 @@ export const authenticateApiKey = asyncHandler(
     req.authMethod = 'apikey';
     req.apiKeyId = apiKeyDoc._id.toString();
     req.apiKeyScopes = apiKeyDoc.scopes;
+
+    // Queue async usage statistics update
+    apiKeyQueue.add('update-usage', { apiKeyId: apiKeyDoc._id.toString() }).catch((err) => {
+      console.error('Failed to queue API key usage update:', err);
+    });
 
     next();
   }

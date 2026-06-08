@@ -19,6 +19,7 @@ import conversationRoutes from '@/modules/conversation/conversation.routes';
 import apiKeyRoutes from '@/modules/apikey/apiKey.routes';
 import analyticsRoutes from '@/modules/analytics/analytics.routes';
 import adminRoutes from '@/modules/admin/admin.routes';
+import { initWorkers, setupSchedulers } from '@/jobs/index';
 
 const app = express();
 
@@ -103,6 +104,10 @@ if (env.NODE_ENV !== 'test') {
       if (!redisHealthy) {
         console.warn('⚠ Redis is not healthy on boot, check configuration.');
       }
+
+      // Initialize background workers & schedulers
+      initWorkers();
+      await setupSchedulers();
 
       app.listen(env.PORT, () => {
         console.log(`🚀 Server is running in ${env.NODE_ENV} mode on port ${env.PORT}`);

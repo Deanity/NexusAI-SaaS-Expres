@@ -8,6 +8,7 @@ import { EmailVerification } from '@/modules/auth/emailVerification.model';
 import * as authRepository from '@/modules/auth/auth.repository';
 import * as userRepository from '@/modules/user/user.repository';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '@/shared/utils/token';
+import { emailQueue } from '@/config/queue';
 
 const LOCKOUT_ATTEMPTS = 10;
 const LOCKOUT_TIME_SECONDS = 1800; // 30 minutes
@@ -111,12 +112,12 @@ export const register = async (
     expiresAt,
   });
 
-  // STUB: Print token to console
-  console.log('==================================================');
-  console.log(`✉ [STUB EMAIL] Verification link for ${user.email}:`);
-  console.log(`Token: ${verificationToken}`);
-  console.log(`URL: ${env.API_BASE_URL}/api/v1/auth/verify-email?token=${verificationToken}`);
-  console.log('==================================================');
+  // Queue verification email job
+  await emailQueue.add('send-verification', {
+    email: user.email,
+    name: user.name,
+    token: verificationToken,
+  });
 
   return user;
 };
@@ -301,6 +302,12 @@ export const verifyEmail = async (token: string): Promise<UserDocument> => {
     'Welcome bonus for email verification'
   );
 
+  // Queue welcome email job
+  await emailQueue.add('send-welcome', {
+    email: user.email,
+    name: user.name,
+  });
+
   return user;
 };
 
@@ -352,12 +359,12 @@ export const resendVerification = async (email: string): Promise<void> => {
     expiresAt,
   });
 
-  // STUB: Print token to console
-  console.log('==================================================');
-  console.log(`✉ [STUB EMAIL] Resent verification link for ${user.email}:`);
-  console.log(`Token: ${verificationToken}`);
-  console.log(`URL: ${env.API_BASE_URL}/api/v1/auth/verify-email?token=${verificationToken}`);
-  console.log('==================================================');
+  // Queue resend verification email job
+  await emailQueue.add('send-verification', {
+    email: user.email,
+    name: user.name,
+    token: verificationToken,
+  });
 };
 
 export const forgotPassword = async (email: string): Promise<void> => {
@@ -387,12 +394,11 @@ export const forgotPassword = async (email: string): Promise<void> => {
     expiresAt,
   });
 
-  // STUB: Print token to console
-  console.log('==================================================');
-  console.log(`✉ [STUB EMAIL] Password reset link for ${user.email}:`);
-  console.log(`Token: ${resetToken}`);
-  console.log(`URL: ${env.API_BASE_URL}/api/v1/auth/reset-password?token=${resetToken}`);
-  console.log('==================================================');
+  // Queue password reset email job
+  await emailQueue.add('send-password-reset', {
+    email: user.email,
+    token: resetToken,
+  });
 };
 
 export const resetPassword = async (token: string, passwordRules: string): Promise<void> => {
