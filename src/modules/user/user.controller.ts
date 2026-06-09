@@ -4,8 +4,9 @@ import * as authRepository from '@/modules/auth/auth.repository';
 import { sendSuccess } from '@/shared/utils/response';
 import { AppError } from '@/shared/errors/AppError';
 import { UserDocument } from '@/modules/user/user.model';
+import { asyncHandler } from '@/shared/utils/asyncHandler';
 
-export const getMe = async (req: Request, res: Response): Promise<void> => {
+export const getMe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
     throw new AppError('Authentication required', 401, 'TOKEN_INVALID');
   }
@@ -30,9 +31,9 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
       updatedAt: user.updatedAt,
     },
   });
-};
+});
 
-export const updateMe = async (req: Request, res: Response): Promise<void> => {
+export const updateMe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
     throw new AppError('Authentication required', 401, 'TOKEN_INVALID');
   }
@@ -53,9 +54,9 @@ export const updateMe = async (req: Request, res: Response): Promise<void> => {
       credits: user.credits,
     },
   });
-};
+});
 
-export const changePassword = async (req: Request, res: Response): Promise<void> => {
+export const changePassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
     throw new AppError('Authentication required', 401, 'TOKEN_INVALID');
   }
@@ -82,4 +83,4 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
   await authRepository.revokeAllUserTokens(user._id.toString());
 
   sendSuccess(res, 200, 'Password changed successfully. Please log in again.');
-};
+});

@@ -308,7 +308,8 @@ export const verifyEmail = async (token: string): Promise<UserDocument> => {
     name: user.name,
   });
 
-  return user;
+  const updatedUser = await userRepository.findUserById(user._id.toString());
+  return updatedUser || user;
 };
 
 export const resendVerification = async (email: string): Promise<void> => {
@@ -401,7 +402,10 @@ export const forgotPassword = async (email: string): Promise<void> => {
   });
 };
 
-export const resetPassword = async (token: string, passwordRules: string): Promise<void> => {
+export const resetPassword = async (
+  token: string,
+  passwordRules: string
+): Promise<UserDocument> => {
   const resetTokenDoc = await EmailVerification.findOne({ token, type: 'password_reset' });
   if (!resetTokenDoc || resetTokenDoc.usedAt) {
     throw new AppError('Invalid or expired password reset token', 400, 'VALIDATION_ERROR');
@@ -429,4 +433,5 @@ export const resetPassword = async (token: string, passwordRules: string): Promi
   await authRepository.revokeAllUserTokens(user._id.toString());
 
   console.log(`✔ [AUTH] Password reset successful for user: ${user.email}`);
+  return user;
 };

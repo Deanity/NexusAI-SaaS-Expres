@@ -21,6 +21,8 @@ import analyticsRoutes from '@/modules/analytics/analytics.routes';
 import adminRoutes from '@/modules/admin/admin.routes';
 import { initWorkers, setupSchedulers } from '@/jobs/index';
 import { createRateLimiter } from '@/shared/middleware/rateLimiter';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from '@/docs/swagger';
 
 const app = express();
 
@@ -91,6 +93,11 @@ app.use('/api/v1/conversations', generalLimiter, conversationRoutes);
 app.use('/api/v1/api-keys', apiKeyRoutes);
 app.use('/api/v1/analytics', generalLimiter, analyticsRoutes);
 app.use('/api/v1/admin', adminRoutes);
+
+// Swagger API Documentation
+if (env.SWAGGER_ENABLED || env.NODE_ENV === 'development') {
+  app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(specs));
+}
 
 // 404 handler for unknown routes
 app.use((req: Request, _res: Response, next: NextFunction): void => {

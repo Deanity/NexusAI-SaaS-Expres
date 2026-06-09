@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '@/config/env';
 
@@ -13,7 +14,8 @@ export const signAccessToken = (userId: string, role: string): string => {
 };
 
 export const signRefreshToken = (userId: string, role: string): string => {
-  return jwt.sign({ sub: userId, role }, env.JWT_REFRESH_SECRET, {
+  const jti = crypto.randomUUID();
+  return jwt.sign({ sub: userId, role, jti }, env.JWT_REFRESH_SECRET, {
     expiresIn: env.JWT_REFRESH_EXPIRY as SignOptions['expiresIn'],
   });
 };

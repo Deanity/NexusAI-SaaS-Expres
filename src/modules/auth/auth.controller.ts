@@ -4,6 +4,7 @@ import { sendSuccess } from '@/shared/utils/response';
 import { env } from '@/config/env';
 import { AppError } from '@/shared/errors/AppError';
 import { getCookie } from '@/shared/utils/cookie';
+import { asyncHandler } from '@/shared/utils/asyncHandler';
 
 // Helper to set cookie
 const setRefreshTokenCookie = (res: Response, token: string): void => {
@@ -15,7 +16,7 @@ const setRefreshTokenCookie = (res: Response, token: string): void => {
   });
 };
 
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { name, email, password } = req.body;
   const user = await authService.register(name, email, password);
   sendSuccess(
@@ -32,9 +33,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       },
     }
   );
-};
+});
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   const userAgent = req.headers['user-agent'] || 'unknown';
   const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
@@ -47,9 +48,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     user: result.user,
     accessToken: result.accessToken,
   });
-};
+});
 
-export const refresh = async (req: Request, res: Response): Promise<void> => {
+export const refresh = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const token = getCookie(req, 'refreshToken') || req.body?.refreshToken;
   if (!token) {
     throw new AppError('Refresh token is missing', 401, 'TOKEN_INVALID');
@@ -65,9 +66,9 @@ export const refresh = async (req: Request, res: Response): Promise<void> => {
   sendSuccess(res, 200, 'Token refreshed successfully', {
     accessToken: result.accessToken,
   });
-};
+});
 
-export const logout = async (req: Request, res: Response): Promise<void> => {
+export const logout = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const token = getCookie(req, 'refreshToken') || req.body?.refreshToken;
   if (token && req.user) {
     await authService.logout(req.user.sub, token);
@@ -75,18 +76,18 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 
   res.clearCookie('refreshToken');
   sendSuccess(res, 200, 'Logout successful');
-};
+});
 
-export const logoutAll = async (req: Request, res: Response): Promise<void> => {
+export const logoutAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   if (req.user) {
     await authService.logoutAll(req.user.sub);
   }
 
   res.clearCookie('refreshToken');
   sendSuccess(res, 200, 'Logged out from all devices successfully');
-};
+});
 
-export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
+export const verifyEmail = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { token } = req.body;
   const user = await authService.verifyEmail(token);
   sendSuccess(res, 200, 'Email verified successfully', {
@@ -99,22 +100,24 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
       credits: user.credits,
     },
   });
-};
+});
 
-export const resendVerification = async (req: Request, res: Response): Promise<void> => {
-  const { email } = req.body;
-  await authService.resendVerification(email);
-  sendSuccess(res, 200, 'Verification email resent successfully');
-};
+export const resendVerification = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.body;
+    await authService.resendVerification(email);
+    sendSuccess(res, 200, 'Verification email resent successfully');
+  }
+);
 
-export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+export const forgotPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email } = req.body;
   await authService.forgotPassword(email);
   sendSuccess(res, 200, 'If the email exists, a password reset link has been sent.');
-};
+});
 
-export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+export const resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { token, password } = req.body;
   await authService.resetPassword(token, password);
   sendSuccess(res, 200, 'Password has been reset successfully.');
-};
+});
