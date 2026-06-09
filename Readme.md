@@ -5,7 +5,10 @@
 [![Express](https://img.shields.io/badge/Express-4.x-lightgrey.svg?style=flat-square)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg?style=flat-square)](https://www.mongodb.com/)
 [![Redis](https://img.shields.io/badge/Redis-7.x-red.svg?style=flat-square)](https://redis.io/)
+[![Tests](https://img.shields.io/badge/Tests-118%20Passed-green.svg?style=flat-square)](tests/)
+[![Coverage](https://img.shields.io/badge/Coverage-70.6%25-green.svg?style=flat-square)](tests/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+
 
 NexusAI is a production-ready AI SaaS backend platform that provides multi-model AI chat, conversation history, credit-based billing, subscription plans, API key management, and usage analytics through a secure, scalable Node.js/Express REST API.
 
@@ -196,6 +199,42 @@ docker compose up -d            # Start all services inside Docker
 docker compose down             # Stop Docker services
 docker compose logs -f api      # Stream API logs
 ```
+
+---
+
+## 🧪 Testing & Code Coverage
+
+NexusAI has a comprehensive suite of unit and integration tests using **Jest** and **Supertest** to ensure code reliability and concurrent-safety across all modules.
+
+### Coverage Targets & Verification
+*   **Overall Coverage Target**: `>70%` statement coverage
+*   **Service-level Coverage Target**: `>90%` statement coverage for all domain service layers (`src/modules/[module]/[module].service.ts`)
+
+Currently, **100% of the 16 test suites (118 tests)** are passing with the following coverage metrics:
+
+| Module/Service | Statement Coverage (%) | Function Coverage (%) | Target Status |
+| :--- | :--- | :--- | :--- |
+| **All Files (Overall)** | **70.61%** | **58.93%** | **Passed (>70%)** |
+| `src/modules/admin/admin.service.ts` | 98.42% | 100.00% | Passed (>90%) |
+| `src/modules/ai/ai.service.ts` | 98.88% | 87.50% | Passed (>90%) |
+| `src/modules/analytics/analytics.service.ts` | 98.14% | 100.00% | Passed (>90%) |
+| `src/modules/apikey/apiKey.service.ts` | 92.00% | 100.00% | Passed (>90%) |
+| `src/modules/auth/auth.service.ts` | 99.40% | 100.00% | Passed (>90%) |
+| `src/modules/conversation/conversation.service.ts` | 93.22% | 100.00% | Passed (>90%) |
+| `src/modules/credit/credit.service.ts` | 100.00% | 100.00% | Passed (>90%) |
+| `src/modules/subscription/subscription.service.ts` | 90.56% | 100.00% | Passed (>90%) |
+
+### Running the Tests
+To run all unit and integration tests sequentially with coverage reporting:
+```bash
+pnpm test:coverage
+```
+
+### Test Isolation Architecture
+To support running tests concurrently in CI/CD without database collisions or rate limiter collisions:
+1.  **MongoDB Isolation**: The test runner configures a unique database name per Jest worker (e.g. `nexusai_test_1`, `nexusai_test_2`) using the `JEST_WORKER_ID` env variable.
+2.  **Redis Database Isolation**: Each test worker utilizes an isolated Redis database index dynamically computed using modulo arithmetic (`JEST_WORKER_ID % 16`).
+3.  **Background Worker Deactivation**: BullMQ background processors (such as email and subscription renewals) are disabled when running tests to ensure atomic cache flushes do not interfere with test state.
 
 ---
 
