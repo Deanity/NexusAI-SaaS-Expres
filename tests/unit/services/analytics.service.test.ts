@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { UsageEvent, UsageEventType } from '@/modules/analytics/usageEvent.model';
 import { Message } from '@/modules/conversation/message.model';
 import * as analyticsService from '@/modules/analytics/analytics.service';
@@ -25,7 +26,7 @@ describe('Analytics Service Unit Tests', () => {
 
     // Create mock Message with latency
     await Message.create({
-      conversationId: new Object(),
+      conversationId: new mongoose.Types.ObjectId(),
       userId: user._id,
       role: 'assistant',
       content: 'AI Response',

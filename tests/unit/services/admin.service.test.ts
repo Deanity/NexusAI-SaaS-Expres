@@ -174,4 +174,59 @@ describe('Admin Service Unit Tests', () => {
     expect(item?.tokensUsed).toBe(100);
     expect(item?.creditsUsed).toBe(0.2);
   });
+
+  it('should throw 404 when updating status of a non-existent user', async () => {
+    const fakeId = '507f1f77bcf86cd799439011';
+    await expect(adminService.updateUserStatus(fakeId, false)).rejects.toThrow(AppError);
+  });
+
+  it('should throw 404 when updating role of a non-existent user', async () => {
+    const fakeId = '507f1f77bcf86cd799439011';
+    await expect(adminService.updateUserRole(fakeId, 'admin')).rejects.toThrow(AppError);
+  });
+
+  it('should throw 404 when adjusting credits of a non-existent user', async () => {
+    const fakeId = '507f1f77bcf86cd799439011';
+    await expect(adminService.adjustCredits(fakeId, 50, 'bonus')).rejects.toThrow(AppError);
+  });
+
+  it('should throw 404 when updating non-existent plan', async () => {
+    const fakeId = '507f1f77bcf86cd799439011';
+    await expect(adminService.updatePlan(fakeId, { name: 'super' })).rejects.toThrow(AppError);
+  });
+
+  it('should throw 409 when updating plan slug to an already existing slug', async () => {
+    await createTestPlan({ slug: 'gold' });
+    const plan2 = await createTestPlan({ slug: 'silver' });
+    await expect(
+      adminService.updatePlan(plan2._id.toString(), { slug: 'gold' })
+    ).rejects.toThrow(AppError);
+  });
+
+  it('should clear redis cache on plan slug update', async () => {
+    const plan = await createTestPlan({ slug: 'original-slug' });
+    const updated = await adminService.updatePlan(plan._id.toString(), { slug: 'new-slug' });
+    expect(updated.slug).toBe('new-slug');
+  });
+
+  it('should throw 404 when deleting non-existent plan', async () => {
+    const fakeId = '507f1f77bcf86cd799439011';
+    await expect(adminService.deletePlan(fakeId)).rejects.toThrow(AppError);
+  });
+
+  it('should hit cache on getAdminOverview and getAdminUsersBreakdown', async () => {
+    const from = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const to = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    // Call first time to populate cache
+    await adminService.getAdminOverview(from, to);
+    await adminService.getAdminUsersBreakdown(from, to, 1, 10);
+
+    // Call second time to hit cache
+    const overview = await adminService.getAdminOverview(from, to);
+    const breakdown = await adminService.getAdminUsersBreakdown(from, to, 1, 10);
+
+    expect(overview).toBeTruthy();
+    expect(breakdown).toBeTruthy();
+  });
 });

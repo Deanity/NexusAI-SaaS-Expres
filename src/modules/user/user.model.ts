@@ -86,6 +86,16 @@ userSchema.pre<UserDocument>('save', async function (next) {
   }
 });
 
+// Post-save hook to invalidate cache
+userSchema.post<UserDocument>('save', async function (doc) {
+  try {
+    const { redis } = await import('@/config/redis');
+    await redis.del(`user:${doc._id.toString()}`);
+  } catch (error) {
+    // Ignore cache deletion error on save
+  }
+});
+
 // Compare password method
 userSchema.methods.comparePassword = async function (
   this: UserDocument,

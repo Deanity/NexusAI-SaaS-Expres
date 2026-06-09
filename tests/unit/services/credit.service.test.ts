@@ -3,6 +3,7 @@ import { createTestUser } from '../../helpers/factories';
 import { User } from '@/modules/user/user.model';
 import { CreditLedger, CreditAction } from '@/modules/credit/creditLedger.model';
 import { AppError } from '@/shared/errors/AppError';
+import mongoose from 'mongoose';
 
 describe('Credit Service Unit Tests', () => {
   it('should successfully add credits to a user and log in ledger', async () => {
@@ -40,6 +41,18 @@ describe('Credit Service Unit Tests', () => {
     ).rejects.toThrow(AppError);
   });
 
+  it('should throw 404 when adding credits to a non-existent user', async () => {
+    const fakeId = new mongoose.Types.ObjectId().toString();
+    await expect(
+      creditService.addCredits(fakeId, 100, CreditAction.PURCHASE)
+    ).rejects.toThrow(
+      expect.objectContaining({
+        statusCode: 404,
+        code: 'NOT_FOUND',
+      })
+    );
+  });
+
   it('should successfully deduct credits from a user and log in ledger', async () => {
     const user = await createTestUser({ credits: 100 });
 
@@ -55,7 +68,7 @@ describe('Credit Service Unit Tests', () => {
     const updatedUser = await User.findById(user._id);
     expect(updatedUser?.credits).toBe(70);
 
-    const ledger = await CreditLedger.findOne({ userId: user._id });
+    const ledger = await CreditLedger.findOne({ userId: user._id, amount: -30 });
     expect(ledger).toBeTruthy();
     expect(ledger?.amount).toBe(-30);
     expect(ledger?.balanceAfter).toBe(70);
@@ -79,11 +92,35 @@ describe('Credit Service Unit Tests', () => {
     ).rejects.toThrow(AppError);
   });
 
+  it('should throw 422 when deducting credits from a non-existent user', async () => {
+    const fakeId = new mongoose.Types.ObjectId().toString();
+    await expect(
+      creditService.deductCredits(fakeId, 10, CreditAction.AI_USAGE)
+    ).rejects.toThrow(
+      expect.objectContaining({
+        statusCode: 422,
+        code: 'INSUFFICIENT_CREDITS',
+      })
+    );
+  });
+
   it('should return the correct balance of a user', async () => {
     const user = await createTestUser({ credits: 125 });
 
     const balance = await creditService.getBalance(user._id.toString());
     expect(balance).toBe(125);
+  });
+
+  it('should throw 404 when getting balance of a non-existent user', async () => {
+    const fakeId = new mongoose.Types.ObjectId().toString();
+    await expect(
+      creditService.getBalance(fakeId)
+    ).rejects.toThrow(
+      expect.objectContaining({
+        statusCode: 404,
+        code: 'NOT_FOUND',
+      })
+    );
   });
 
   it('should retrieve credit history and support pagination', async () => {
@@ -101,5 +138,71 @@ describe('Credit Service Unit Tests', () => {
     expect(res.meta.totalPages).toBe(2);
     expect(res.meta.page).toBe(1);
     expect(res.meta.limit).toBe(2);
+  });
+
+  it('should fallback to non-transaction top-up when replica set is not configured', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const startSessionSpy = jest.spyOn(mongoose, 'startSession').mockRejectedValueOnce(
+      new Error('Replica Set member error mock')
+    );
+
+    await creditService.addCredits(
+      user._id.toString(),
+      50,
+      CreditAction.PURCHASE,
+      null,
+      'Manual',
+      'Test replica set fallback top-up'
+    );
+
+    const updatedUser = await User.findById(user._id);
+    expect(updatedUser?.credits).toBe(150);
+    startSessionSpy.mockRestore();
+  });
+
+  it('should fallback to non-transaction deduction when replica set is not configured', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const startSessionSpy = jest.spyOn(mongoose, 'startSession').mockRejectedValueOnce(
+      new Error('Replica Set member error mock')
+    );
+
+    await creditService.deductCredits(
+      user._id.toString(),
+      30,
+      CreditAction.AI_USAGE,
+      null,
+      'Message',
+      'Test replica set fallback deduction'
+    );
+
+    const updatedUser = await User.findById(user._id);
+    expect(updatedUser?.credits).toBe(70);
+    startSessionSpy.mockRestore();
+  });
+
+  it('should throw original error if addCredits transaction fails with non-replica set error', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const startSessionSpy = jest.spyOn(mongoose, 'startSession').mockRejectedValueOnce(
+      new Error('Some generic database crash')
+    );
+
+    await expect(
+      creditService.addCredits(user._id.toString(), 50, CreditAction.PURCHASE)
+    ).rejects.toThrow('Some generic database crash');
+
+    startSessionSpy.mockRestore();
+  });
+
+  it('should throw original error if deductCredits transaction fails with non-replica set error', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const startSessionSpy = jest.spyOn(mongoose, 'startSession').mockRejectedValueOnce(
+      new Error('Some generic database crash')
+    );
+
+    await expect(
+      creditService.deductCredits(user._id.toString(), 30, CreditAction.AI_USAGE)
+    ).rejects.toThrow('Some generic database crash');
+
+    startSessionSpy.mockRestore();
   });
 });

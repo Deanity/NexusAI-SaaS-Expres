@@ -31,7 +31,13 @@ describe('Auth Routes Integration Tests', () => {
 
     expect(verifyRes.status).toBe(200);
 
+    console.log('TEST USER ID:', user?._id);
+    const allUsers = await User.find({});
+    console.log('ALL USERS IN DB:', allUsers.map(u => ({ id: u._id, email: u.email, isEmailVerified: u.isEmailVerified })));
+
     const verifiedUser = await User.findById(user?._id);
+    console.log('VERIFIED USER FETCHED:', verifiedUser);
+
     expect(verifiedUser?.isEmailVerified).toBe(true);
     expect(verifiedUser?.credits).toBe(100); // welcome bonus
 

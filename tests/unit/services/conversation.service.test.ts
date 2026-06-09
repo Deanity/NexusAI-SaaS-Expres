@@ -25,10 +25,17 @@ describe('Conversation Service Unit Tests', () => {
     const user = await createTestUser();
     const userId = user._id.toString();
 
-    await conversationService.createConversation(userId, 'gemini-1.5-flash', 'Chat 1');
-    await conversationService.createConversation(userId, 'gemini-1.5-flash', 'Chat 2');
+    const c1 = await conversationService.createConversation(userId, 'gemini-1.5-flash', 'Chat 1');
+    const c2 = await conversationService.createConversation(userId, 'gemini-1.5-flash', 'Chat 2');
+
+    console.log('CREATED CONVERSATIONS:', { c1: c1.toObject(), c2: c2.toObject() });
+
+    const allInDb = await Conversation.find({});
+    console.log('ALL CONVERSATIONS IN DB:', allInDb.map(c => c.toObject()));
 
     const res = await conversationService.getConversationsList(userId, 1, 10);
+    console.log('GET CONVERSATIONS LIST RESULT:', res.conversations.map(c => c.toObject()));
+
     expect(res.conversations.length).toBe(2);
     expect(res.meta.total).toBe(2);
   });

@@ -50,7 +50,15 @@ export const createTestPlan = async (
     isActive: true,
   };
 
-  return Plan.create({ ...defaultPlan, ...overrides });
+  const mergedFeatures = overrides.features
+    ? { ...defaultPlan.features, ...overrides.features }
+    : defaultPlan.features;
+
+  return Plan.create({
+    ...defaultPlan,
+    ...overrides,
+    features: mergedFeatures,
+  });
 };
 
 export const createTestSubscription = async (

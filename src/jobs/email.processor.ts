@@ -10,17 +10,20 @@ export interface EmailJobData {
   planName?: string;
 }
 
-export const emailWorker = new Worker(
-  'email-queue',
-  async (job: Job<EmailJobData>) => {
-    const { name } = job;
-    const { email, name: userName, token, amount, planName } = job.data;
+export let emailWorker: Worker | null = null;
 
-    console.log(`[WORKER] Processing email job: ${name} (Job ID: ${job.id})`);
+if (process.env.NODE_ENV !== 'test') {
+  emailWorker = new Worker(
+    'email-queue',
+    async (job: Job<EmailJobData>) => {
+      const { name } = job;
+      const { email, name: userName, token, amount, planName } = job.data;
 
-    switch (name) {
-      case 'send-verification':
-        console.log(`
+      console.log(`[WORKER] Processing email job: ${name} (Job ID: ${job.id})`);
+
+      switch (name) {
+        case 'send-verification':
+          console.log(`
 ┌──────────────────────────────────────────────────────────┐
 │ ✉ [STUB EMAIL] EMAIL VERIFICATION                       │
 ├──────────────────────────────────────────────────────────┤
@@ -28,10 +31,10 @@ export const emailWorker = new Worker(
 │ Link: ${env.API_BASE_URL}/api/v1/auth/verify-email?token=${token}
 │ Expire: 24 Hours
 └──────────────────────────────────────────────────────────┘`);
-        break;
+          break;
 
-      case 'send-password-reset':
-        console.log(`
+        case 'send-password-reset':
+          console.log(`
 ┌──────────────────────────────────────────────────────────┐
 │ ✉ [STUB EMAIL] PASSWORD RESET                           │
 ├──────────────────────────────────────────────────────────┤
@@ -39,10 +42,10 @@ export const emailWorker = new Worker(
 │ Link: ${env.API_BASE_URL}/api/v1/auth/reset-password?token=${token}
 │ Expire: 1 Hour
 └──────────────────────────────────────────────────────────┘`);
-        break;
+          break;
 
-      case 'send-welcome':
-        console.log(`
+        case 'send-welcome':
+          console.log(`
 ┌──────────────────────────────────────────────────────────┐
 │ ✉ [STUB EMAIL] WELCOME BONUS                            │
 ├──────────────────────────────────────────────────────────┤
@@ -50,10 +53,10 @@ export const emailWorker = new Worker(
 │ Message: Welcome to NexusAI!
 │ You have been granted ${env.WELCOME_BONUS_CREDITS} free credits.
 └──────────────────────────────────────────────────────────┘`);
-        break;
+          break;
 
-      case 'send-receipt':
-        console.log(`
+        case 'send-receipt':
+          console.log(`
 ┌──────────────────────────────────────────────────────────┐
 │ ✉ [STUB EMAIL] PAYMENT RECEIPT                          │
 ├──────────────────────────────────────────────────────────┤
@@ -62,21 +65,22 @@ export const emailWorker = new Worker(
 │ Amount Paid: ${amount}
 │ Status: SUCCESS
 └──────────────────────────────────────────────────────────┘`);
-        break;
+          break;
 
-      default:
-        console.warn(`[WORKER] Unknown email job type: ${name}`);
-    }
-  },
-  {
-    connection: createQueueConnection() as unknown as ConnectionOptions,
-    limiter: {
-      max: 5,
-      duration: 1000, // Process max 5 emails per second
+        default:
+          console.warn(`[WORKER] Unknown email job type: ${name}`);
+      }
     },
-  }
-);
+    {
+      connection: createQueueConnection() as unknown as ConnectionOptions,
+      limiter: {
+        max: 5,
+        duration: 1000, // Process max 5 emails per second
+      },
+    }
+  );
 
-emailWorker.on('failed', (job, err) => {
-  console.error(`❌ [WORKER] Email job ${job?.id} failed with error:`, err);
-});
+  emailWorker.on('failed', (job, err) => {
+    console.error(`❌ [WORKER] Email job ${job?.id} failed with error:`, err);
+  });
+}

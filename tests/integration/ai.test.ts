@@ -57,7 +57,13 @@ describe('AI Chat Route Integration Tests', () => {
     expect(chatSpy).toHaveBeenCalled();
 
     // Verify credits deducted
+    console.log('TEST USER ID:', user._id);
+    const allUsers = await User.find({});
+    console.log('ALL USERS IN DB:', allUsers.map(u => ({ id: u._id, email: u.email, credits: u.credits })));
+
     const updatedUser = await User.findById(user._id);
+    console.log('UPDATED USER FETCHED:', updatedUser);
+
     expect(updatedUser?.credits).toBe(9.8); // 10 - 0.2 = 9.8
 
     // Verify messages saved

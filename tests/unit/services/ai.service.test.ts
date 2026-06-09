@@ -5,6 +5,8 @@ import { User } from '@/modules/user/user.model';
 import { Message } from '@/modules/conversation/message.model';
 import { UsageEvent, UsageEventType } from '@/modules/analytics/usageEvent.model';
 import { AppError } from '@/shared/errors/AppError';
+import mongoose from 'mongoose';
+import { redis } from '@/config/redis';
 
 describe('AI Service Unit Tests', () => {
   let chatSpy: jest.SpyInstance;
@@ -91,5 +93,93 @@ describe('AI Service Unit Tests', () => {
 
     await expect(aiService.handleChat(user._id.toString(), options)).rejects.toThrow(AppError);
     expect(chatSpy).not.toHaveBeenCalled();
+  });
+
+  it('should cover all model rates including future models and fallback', () => {
+    expect(aiService.getModelRate('gpt-4o-mini')).toBe(2);
+    expect(aiService.getModelRate('claude-3-5-sonnet')).toBe(8);
+    expect(aiService.getModelRate('claude-3-haiku')).toBe(1);
+    expect(aiService.getModelRate('nonexistent-model')).toBe(2);
+  });
+
+  it('should throw 404 if conversationId is provided but conversation does not exist', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const fakeConvId = new mongoose.Types.ObjectId().toString();
+    const options = {
+      conversationId: fakeConvId,
+      model: 'gemini-1.5-flash',
+      message: 'Hello!',
+      ipAddress: '127.0.0.1',
+      userAgent: 'Jest Test Agent',
+    };
+
+    await expect(aiService.handleChat(user._id.toString(), options)).rejects.toThrow(
+      expect.objectContaining({
+        statusCode: 404,
+        code: 'NOT_FOUND',
+      })
+    );
+  });
+
+  it('should fetch recent messages context when sending message to existing conversation', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const options = {
+      model: 'gemini-1.5-flash',
+      message: 'First Message',
+      ipAddress: '127.0.0.1',
+      userAgent: 'Jest Test Agent',
+    };
+
+    const firstResult = await aiService.handleChat(user._id.toString(), options);
+    
+    const secondResult = await aiService.handleChat(user._id.toString(), {
+      conversationId: firstResult.conversationId,
+      model: 'gemini-1.5-flash',
+      message: 'Second Message',
+      ipAddress: '127.0.0.1',
+      userAgent: 'Jest Test Agent',
+    });
+
+    expect(secondResult.conversationId).toBe(firstResult.conversationId);
+  });
+
+  it('should support streaming chat and trigger onChunk callback', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const chunks: string[] = [];
+    const onChunk = (chunk: string) => {
+      chunks.push(chunk);
+    };
+
+    const options = {
+      model: 'gemini-1.5-flash',
+      message: 'Hello!',
+      stream: true,
+      ipAddress: '127.0.0.1',
+      userAgent: 'Jest Test Agent',
+    };
+
+    const result = await aiService.handleChat(user._id.toString(), options, onChunk);
+    expect(result).toBeTruthy();
+    expect(chunks.length).toBeGreaterThan(0);
+    // First chunk contains conversationId
+    expect(chunks[0]).toContain('conversationId');
+  });
+
+  it('should delete analytics cache in Redis if cache keys exist', async () => {
+    const user = await createTestUser({ credits: 100 });
+    const cacheKey = `analytics:${user._id.toString()}:some-hash`;
+    await redis.set(cacheKey, 'some-cached-data');
+
+    const options = {
+      model: 'gemini-1.5-flash',
+      message: 'Hello!',
+      ipAddress: '127.0.0.1',
+      userAgent: 'Jest Test Agent',
+    };
+
+    await aiService.handleChat(user._id.toString(), options);
+
+    const cached = await redis.get(cacheKey);
+    expect(cached).toBeNull();
   });
 });
