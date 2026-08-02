@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversation History NexusAI API Reference</title>
+  <meta name="description" content="NexusAI Conversation API list, create, update, archive conversations and paginate messages." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/google-light.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <link rel="stylesheet" href="../css/tokens.css" /><link rel="stylesheet" href="../css/base.css" /><link rel="stylesheet" href="../css/layout.css" /><link rel="stylesheet" href="../css/components.css" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <a href="../index.html" class="topbar__logo" aria-label="NexusAI Docs home"><span class="topbar__logo-mark" aria-hidden="true"><svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h4v4H2V2zm6 0h4v4H8V2zm0 6h4v4H8V8zm-6 0h4v4H2V8z" fill="white"/></svg></span>NexusAI Docs</a>
+    <div class="topbar__right"><span class="topbar__version">v1.0.0</span><a href="https://github.com/Deanity/NexusAI-SaaS-Expres" class="btn btn--ghost btn--sm" target="_blank" rel="noopener noreferrer">GitHub</a><button class="topbar__hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div>
+  </header>
+  <div class="doc-root">
+    <nav class="sidebar" id="sidebar" aria-label="API documentation navigation">
+      <div class="sidebar__inner">
+        <div class="sidebar__search"><div class="search-box" role="search"><input type="search" class="search-box__input" placeholder="search endpoints" aria-label="Search endpoints" id="search-input" autocomplete="off" /><span class="search-box__kbd" aria-hidden="true">⌘K</span><div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div></div></div>
+        <div class="nav-group"><span class="nav-group__label">Overview</span><a href="../index.html" class="nav-item">Getting started</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Auth</span><a href="auth.html#register" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> register</a><a href="auth.html#login" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> login</a><a href="auth.html#refresh" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> refresh</a><a href="auth.html#logout" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> logout</a><a href="auth.html#verify-email" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> verify email</a><a href="auth.html#forgot-password" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> forgot password</a><a href="auth.html#reset-password" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> reset password</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">User</span><a href="user.html#me" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> profile</a><a href="user.html#update-me" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="user.html#change-password" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> password</a><a href="user.html#delete-me" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> delete</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">AI Chat</span><a href="ai.html#chat" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> chat</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group">
+          <span class="nav-group__label">Conversation</span>
+          <a href="conversation.html#list" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> list</a>
+          <a href="conversation.html#create" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> create</a>
+          <a href="conversation.html#get" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> get</a>
+          <a href="conversation.html#update" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a>
+          <a href="conversation.html#archive" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> archive</a>
+          <a href="conversation.html#messages" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> messages</a>
+          <a href="conversation.html#clear-messages" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> clear messages</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Credit</span><a href="credit.html#balance" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> balance</a><a href="credit.html#history" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> history</a><a href="credit.html#purchase" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> purchase</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">API Keys</span><a href="api-keys.html#list" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> list</a><a href="api-keys.html#create" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> create</a><a href="api-keys.html#update" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="api-keys.html#revoke" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> revoke</a><a href="api-keys.html#rotate" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> rotate</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Subscription</span><a href="subscription.html#plans" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> plans</a><a href="subscription.html#subscribe" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> subscribe</a><a href="subscription.html#current" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> current</a><a href="subscription.html#cancel" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> cancel</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Analytics</span><a href="analytics.html#overview" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> overview</a><a href="analytics.html#daily" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> daily</a><a href="analytics.html#models" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> models</a><a href="analytics.html#api-keys" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> api keys</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Admin</span><a href="admin.html#users" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> users</a><a href="admin.html#credits-adjust" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> credits</a><a href="admin.html#create-plan" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> plans</a><a href="admin.html#analytics-overview" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> analytics</a></div>
+      </div>
+    </nav>
+    <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+    <div class="doc-main">
+      <main class="content-area" id="main">
+        <h1 class="text-module-title">Conversation History</h1>
+        <p class="text-body" style="margin-bottom:12px;">Full CRUD for conversation history. Users can only access their own conversations. Archived conversations are excluded from the default list unless <code>?archived=true</code> is passed.</p>
+
+        <div class="callout">
+          <strong>Pagination:</strong> All list endpoints support <code>?page=1&limit=20&sort=-createdAt</code>. The response <code>meta</code> object contains <code>page</code>, <code>limit</code>, <code>total</code>, and <code>totalPages</code>.
+        </div>
+
+        <!-- GET /conversations -->
+        <span class="section-anchor" id="list"></span>
+        <div class="endpoint-block" style="margin-top:var(--space-3);">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/conversations</span></div>
+          <p class="endpoint-description">Return a paginated list of the authenticated user's conversations. Pinned conversations always appear first.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="conv-list-query">Query parameters <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="conv-list-query">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">page</td><td class="col-type">integer</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Page number. Default: <code>1</code></td></tr>
+                <tr><td class="col-name">limit</td><td class="col-type">integer</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Items per page. Default: <code>20</code>, max: <code>100</code></td></tr>
+                <tr><td class="col-name">sort</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Sort field. Default: <code>-lastMessageAt</code> (newest first)</td></tr>
+                <tr><td class="col-name">archived</td><td class="col-type">boolean</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Include archived conversations. Default: <code>false</code></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span></div>
+        </div>
+
+        <!-- POST /conversations -->
+        <span class="section-anchor" id="create"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--post">POST</span><span class="endpoint-path">/conversations</span></div>
+          <p class="endpoint-description">Create an empty conversation. The title is auto-generated from the first message sent via <code>POST /ai/chat</code>.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="conv-create-body">Request body <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="conv-create-body">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">model</td><td class="col-type">string</td><td class="col-required"><span class="req">required</span></td><td class="col-desc">AI model for this conversation, e.g. <code>gemini-1.5-flash</code></td></tr>
+                <tr><td class="col-name">title</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Custom title. Auto-generated from first message if omitted</td></tr>
+                <tr><td class="col-name">systemPrompt</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">System instruction prepended to every chat call in this conversation</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">201 Created</span><span class="chip chip--4xx">400 Validation error</span><span class="chip chip--4xx">401 Unauthorized</span></div>
+        </div>
+
+        <!-- GET /conversations/:id -->
+        <span class="section-anchor" id="get"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/conversations/<span class="param">:id</span></span></div>
+          <p class="endpoint-description">Return a single conversation by ID, including metadata. Messages are paginated separately see <a href="#messages">GET messages</a>.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="conv-get-path">Path parameters <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="conv-get-path">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody><tr><td class="col-name">id</td><td class="col-type">string</td><td class="col-required"><span class="req">required</span></td><td class="col-desc">MongoDB ObjectId of the conversation</td></tr></tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">403 Forbidden</span><span class="chip chip--4xx">404 Not found</span></div>
+        </div>
+
+        <!-- PATCH /conversations/:id -->
+        <span class="section-anchor" id="update"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--patch">PATCH</span><span class="endpoint-path">/conversations/<span class="param">:id</span></span></div>
+          <p class="endpoint-description">Update conversation metadata. Partial update only provided fields are changed.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="conv-update-body">Request body <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="conv-update-body">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">title</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">New title, max 60 characters</td></tr>
+                <tr><td class="col-name">isPinned</td><td class="col-type">boolean</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Pin/unpin conversation. Pinned conversations appear first in the list</td></tr>
+                <tr><td class="col-name">systemPrompt</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Update the system prompt for future messages in this conversation</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">403 Forbidden</span><span class="chip chip--4xx">404 Not found</span></div>
+        </div>
+
+        <!-- DELETE /conversations/:id -->
+        <span class="section-anchor" id="archive"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--delete">DELETE</span><span class="endpoint-path">/conversations/<span class="param">:id</span></span></div>
+          <p class="endpoint-description">Soft-delete (archive) a conversation. Sets <code>isArchived: true</code>. The conversation is excluded from the default list and can be restored via <code>PATCH</code>.</p>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">403 Forbidden</span><span class="chip chip--4xx">404 Not found</span></div>
+        </div>
+
+        <!-- GET /conversations/:id/messages -->
+        <span class="section-anchor" id="messages"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/conversations/<span class="param">:id</span>/messages</span></div>
+          <p class="endpoint-description">Return paginated messages for a conversation, ordered oldest first. Default limit: 50. Max limit: 100.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="messages-query">Query parameters <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="messages-query">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">page</td><td class="col-type">integer</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Page number. Default: <code>1</code></td></tr>
+                <tr><td class="col-name">limit</td><td class="col-type">integer</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Messages per page. Default: <code>50</code>, max: <code>100</code></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">403 Forbidden</span><span class="chip chip--4xx">404 Not found</span></div>
+        </div>
+
+        <!-- DELETE /conversations/:id/messages -->
+        <span class="section-anchor" id="clear-messages"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--delete">DELETE</span><span class="endpoint-path">/conversations/<span class="param">:id</span>/messages</span></div>
+          <p class="endpoint-description">Delete all messages in a conversation but keep the conversation itself. The <code>messageCount</code> counter is reset to 0.</p>
+          <div class="callout callout--warning"><strong>Irreversible:</strong> All messages are permanently deleted. The conversation metadata (title, model, systemPrompt) is preserved.</div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">403 Forbidden</span><span class="chip chip--4xx">404 Not found</span></div>
+        </div>
+
+      </main>
+      <aside class="right-rail" aria-label="Code examples">
+        <div class="rail-section">
+          <span class="rail-label">GET /conversations response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">{
+  "success": true,
+  "message": "Conversations fetched",
+  "data": [
+    {
+      "_id": "665f1db73999b015e58749a3",
+      "title": "Explain REST APIs",
+      "model": "gemini-1.5-flash",
+      "messageCount": 6,
+      "totalTokensUsed": 892,
+      "isPinned": true,
+      "isArchived": false,
+      "lastMessageAt": "2024-06-03T10:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 1,
+    "totalPages": 1
+  }
+}</code></pre></div></div>
+        </div>
+        <div class="rail-section">
+          <span class="rail-label">GET messages response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">{
+  "success": true,
+  "data": [
+    {"role":"user","content":"Explain REST APIs.","createdAt":"..."},
+    {"role":"assistant","content":"REST APIs use HTTP...","model":"gemini-1.5-flash","tokensUsed":148}
+  ],
+  "meta": {"page":1,"limit":50,"total":2,"totalPages":1}
+}</code></pre></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <footer class="site-footer" role="contentinfo"><span>NexusAI · v1.0.0 · MIT License</span><div style="display:flex;gap:16px;"><a href="https://github.com/Deanity/NexusAI-SaaS-Expres" target="_blank" rel="noopener noreferrer">GitHub</a><a href="../index.html">Overview</a></div></footer>
+  <script src="../js/copy.js"></script><script src="../js/nav.js"></script><script src="../js/search.js"></script>
+</body>
+</html>

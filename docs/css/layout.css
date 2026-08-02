@@ -1,0 +1,484 @@
+/* ============================================================
+   layout.css NexusAI Docs
+   3-column grid: Sidebar (240px) | Content (720px) | Right Rail (380px)
+   Responsive: desktop ≥ 1024px, tablet 768-1023px, mobile < 768px
+   ============================================================ */
+
+/* --------------------------------------------------
+   Top Navigation Bar
+-------------------------------------------------- */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar-height);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-md);
+  z-index: 100;
+}
+
+.topbar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.topbar__logo:hover {
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.topbar__logo-mark {
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.topbar__logo-mark svg {
+  width: 14px;
+  height: 14px;
+  fill: white;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.topbar__version {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+  padding: 2px 8px;
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Hamburger mobile only */
+.topbar__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  cursor: pointer;
+  border: 1px solid var(--color-border-medium);
+  background: none;
+}
+
+.topbar__hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--color-text-primary);
+  transition: var(--transition-fast);
+}
+
+/* --------------------------------------------------
+   Root layout shell
+-------------------------------------------------- */
+.doc-root {
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--topbar-height);
+}
+
+/* --------------------------------------------------
+   Sidebar
+-------------------------------------------------- */
+.sidebar {
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border-subtle);
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  z-index: 90;
+  transition: transform var(--transition-base);
+}
+
+.sidebar__inner {
+  padding: var(--pad-md) 0 var(--space-5) 0;
+}
+
+/* Search in sidebar */
+.sidebar__search {
+  padding: 0 var(--pad-sm) var(--pad-sm) var(--pad-sm);
+}
+
+/* Nav groups */
+.nav-group {
+  margin-bottom: var(--space-1);
+}
+
+.nav-group__label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  padding: var(--space-1) var(--pad-sm) 8px var(--pad-sm);
+  display: block;
+}
+
+/* Nav items */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px var(--pad-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-item:hover {
+  background-color: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+/* Active nav item 2px left border in Primary */
+.nav-item.is-active,
+.nav-item[aria-current="page"] {
+  background-color: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  border-left-color: var(--color-primary);
+}
+
+.nav-item:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Method badge in sidebar (tiny preview) */
+.nav-item__badge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  border: 1px solid;
+  line-height: 1.4;
+}
+
+/* Nav group divider */
+.nav-divider {
+  height: 1px;
+  background-color: var(--color-border-subtle);
+  margin: 8px 0;
+}
+
+/* --------------------------------------------------
+   Main content area
+-------------------------------------------------- */
+.doc-main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.content-area {
+  flex: 1;
+  max-width: var(--content-max);
+  padding: var(--space-5) var(--pad-lg);
+  min-width: 0;
+}
+
+/* --------------------------------------------------
+   Right rail (code panel)
+-------------------------------------------------- */
+.right-rail {
+  width: var(--rail-width);
+  flex-shrink: 0;
+  padding: var(--space-5) var(--pad-md) var(--space-5) 0;
+  position: sticky;
+  top: var(--topbar-height);
+  height: calc(100vh - var(--topbar-height));
+  overflow-y: auto;
+  align-self: flex-start;
+}
+
+/* Rail section groups request + response per endpoint */
+.rail-section {
+  margin-bottom: var(--space-4);
+  padding-top: var(--space-5);
+  /* aligns with endpoint in content area */
+}
+
+/* --------------------------------------------------
+   Endpoint block layout
+   Content (left) + Rail (right) are siblings in .endpoint-row
+-------------------------------------------------- */
+.endpoint-block {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  margin-bottom: var(--space-4);
+}
+
+.endpoint-block:last-child {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------
+   Landing page layout (no sidebar)
+-------------------------------------------------- */
+.landing-root {
+  min-height: 100vh;
+  padding-top: var(--topbar-height);
+}
+
+.landing-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--pad-lg) var(--space-5) var(--pad-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.landing-hero__subtitle {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-3);
+  max-width: 560px;
+}
+
+.landing-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--pad-lg);
+}
+
+.landing-section+.landing-section {
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* Module card grid */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* Base URL callout panel */
+.base-url-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  padding: var(--pad-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.base-url-panel code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Quick start steps */
+.quickstart-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.quickstart-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quickstart-step__label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.quickstart-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.quickstart-step__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quickstart-step__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* --------------------------------------------------
+   Sidebar overlay (mobile)
+-------------------------------------------------- */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 23, 0.4);
+  z-index: 89;
+}
+
+/* --------------------------------------------------
+   Footer
+-------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--color-border-subtle);
+  padding: var(--pad-md) var(--pad-lg);
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  color: var(--color-text-secondary);
+}
+
+.site-footer a:hover {
+  color: var(--color-text-primary);
+}
+
+/* ============================================================
+   Responsive Breakpoints
+   ============================================================ */
+
+/* --------------------------------------------------
+   Tablet: 768px – 1023px
+   Sidebar narrower, right rail collapses inline
+-------------------------------------------------- */
+@media (max-width: 1023px) {
+  .right-rail {
+    display: none;
+    /* code blocks move inline below each endpoint */
+  }
+
+  .doc-main {
+    flex-direction: column;
+  }
+
+  .content-area {
+    max-width: 100%;
+    padding: var(--space-3) var(--pad-md);
+  }
+
+  /* Show inline code rail inside content */
+  .rail-inline {
+    display: block;
+    margin-top: var(--space-2);
+  }
+
+  .module-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------
+   Mobile: < 768px
+   Sidebar becomes a drawer
+-------------------------------------------------- */
+@media (max-width: 767px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.is-visible {
+    display: block;
+  }
+
+  .doc-main {
+    margin-left: 0;
+  }
+
+  .content-area {
+    padding: var(--space-2) var(--pad-sm);
+  }
+
+  .topbar__hamburger {
+    display: flex;
+  }
+
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-hero {
+    padding: var(--space-3) var(--pad-sm);
+  }
+
+  .landing-section {
+    padding: var(--space-3) var(--pad-sm);
+  }
+
+  .base-url-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .text-display {
+    font-size: 24px;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscriptions NexusAI API Reference</title>
+  <meta name="description" content="NexusAI Subscription API browse plans, subscribe, view current plan, and cancel." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/google-light.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <link rel="stylesheet" href="../css/tokens.css" /><link rel="stylesheet" href="../css/base.css" /><link rel="stylesheet" href="../css/layout.css" /><link rel="stylesheet" href="../css/components.css" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <a href="../index.html" class="topbar__logo" aria-label="NexusAI Docs home"><span class="topbar__logo-mark" aria-hidden="true"><svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h4v4H2V2zm6 0h4v4H8V2zm0 6h4v4H8V8zm-6 0h4v4H2V8z" fill="white"/></svg></span>NexusAI Docs</a>
+    <div class="topbar__right"><span class="topbar__version">v1.0.0</span><a href="https://github.com/Deanity/NexusAI-SaaS-Expres" class="btn btn--ghost btn--sm" target="_blank" rel="noopener noreferrer">GitHub</a><button class="topbar__hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div>
+  </header>
+  <div class="doc-root">
+    <nav class="sidebar" id="sidebar" aria-label="API documentation navigation">
+      <div class="sidebar__inner">
+        <div class="sidebar__search"><div class="search-box" role="search"><input type="search" class="search-box__input" placeholder="search endpoints" aria-label="Search endpoints" id="search-input" autocomplete="off" /><span class="search-box__kbd" aria-hidden="true">⌘K</span><div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div></div></div>
+        <div class="nav-group"><span class="nav-group__label">Overview</span><a href="../index.html" class="nav-item">Getting started</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Auth</span><a href="auth.html#register" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> register</a><a href="auth.html#login" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> login</a><a href="auth.html#refresh" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> refresh</a><a href="auth.html#logout" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> logout</a><a href="auth.html#verify-email" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> verify email</a><a href="auth.html#forgot-password" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> forgot password</a><a href="auth.html#reset-password" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> reset password</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">User</span><a href="user.html#me" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> profile</a><a href="user.html#update-me" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="user.html#change-password" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> password</a><a href="user.html#delete-me" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> delete</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">AI Chat</span><a href="ai.html#chat" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> chat</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Conversation</span><a href="conversation.html#list" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> list</a><a href="conversation.html#create" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> create</a><a href="conversation.html#get" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> get</a><a href="conversation.html#update" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="conversation.html#archive" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> archive</a><a href="conversation.html#messages" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> messages</a><a href="conversation.html#clear-messages" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> clear messages</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Credit</span><a href="credit.html#balance" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> balance</a><a href="credit.html#history" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> history</a><a href="credit.html#purchase" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> purchase</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">API Keys</span><a href="api-keys.html#list" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> list</a><a href="api-keys.html#create" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> create</a><a href="api-keys.html#update" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="api-keys.html#revoke" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> revoke</a><a href="api-keys.html#rotate" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> rotate</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group">
+          <span class="nav-group__label">Subscription</span>
+          <a href="subscription.html#plans" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> plans</a>
+          <a href="subscription.html#plan-detail" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> plan detail</a>
+          <a href="subscription.html#subscribe" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> subscribe</a>
+          <a href="subscription.html#current" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> current</a>
+          <a href="subscription.html#cancel" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> cancel</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Analytics</span><a href="analytics.html#overview" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> overview</a><a href="analytics.html#daily" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> daily</a><a href="analytics.html#models" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> models</a><a href="analytics.html#api-keys" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> api keys</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Admin</span><a href="admin.html#users" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> users</a><a href="admin.html#credits-adjust" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> credits</a><a href="admin.html#create-plan" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> plans</a><a href="admin.html#analytics-overview" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> analytics</a></div>
+      </div>
+    </nav>
+    <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+    <div class="doc-main">
+      <main class="content-area" id="main">
+        <h1 class="text-module-title">Subscriptions</h1>
+        <p class="text-body" style="margin-bottom:var(--space-2);">Browse available plans, subscribe, and manage your subscription. Plan endpoints are public no auth required to view plans.</p>
+
+        <!-- Subscription lifecycle -->
+        <h2 class="section-label" style="margin-top:0;">Subscription lifecycle</h2>
+        <div class="lifecycle" aria-label="Subscription status flow diagram">
+<span class="state">register</span> <span class="arrow">→</span> <span class="state">Free</span> (auto-assigned)
+<span class="state">Free</span>     <span class="arrow">→</span> upgrade <span class="arrow">→</span> <span class="state">ACTIVE</span>
+<span class="state">ACTIVE</span>   <span class="arrow">→</span> cancel  <span class="arrow">→</span> <span class="state">ACTIVE</span> (until period end) <span class="arrow">→</span> <span class="state">CANCELLED</span>
+<span class="state">ACTIVE</span>   <span class="arrow">→</span> payment fail <span class="arrow">→</span> <span class="state">PAST_DUE</span> <span class="arrow">→</span> retry <span class="arrow">→</span> <span class="state">ACTIVE</span> or <span class="state">EXPIRED</span>
+        </div>
+
+        <!-- Status enum -->
+        <h2 class="section-label">Status values</h2>
+        <table class="enum-table" aria-label="SubscriptionStatus enum">
+          <thead><tr><th>Value</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="enum-value">active</td><td class="enum-desc">Plan is currently active and credits are granted</td></tr>
+            <tr><td class="enum-value">trialing</td><td class="enum-desc">In a free trial period</td></tr>
+            <tr><td class="enum-value">past_due</td><td class="enum-desc">Payment failed, awaiting retry</td></tr>
+            <tr><td class="enum-value">cancelled</td><td class="enum-desc">Cancelled active until <code>currentPeriodEnd</code></td></tr>
+            <tr><td class="enum-value">expired</td><td class="enum-desc">Period ended with no renewal</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Plans comparison -->
+        <h2 class="section-label">Default plans</h2>
+        <table class="plan-table" aria-label="Default plans comparison">
+          <thead>
+            <tr><th>Plan</th><th>Credits/cycle</th><th>Max API keys</th><th>Max conv.</th><th>Priority queue</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="plan-name">Free</td><td>0</td><td>1</td><td>5</td><td><span class="cross">—</span></td></tr>
+            <tr><td class="plan-name">Starter</td><td>500</td><td>3</td><td>50</td><td><span class="cross">—</span></td></tr>
+            <tr><td class="plan-name">Pro</td><td>2000</td><td>10</td><td>unlimited</td><td><span class="check">✓</span></td></tr>
+            <tr><td class="plan-name">Enterprise</td><td>10000</td><td>50</td><td>unlimited</td><td><span class="check">✓</span></td></tr>
+          </tbody>
+        </table>
+
+        <hr class="endpoint-divider" />
+
+        <!-- GET /plans -->
+        <span class="section-anchor" id="plans"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/plans</span></div>
+          <p class="endpoint-description">Return all active subscription plans. <strong>Public endpoint</strong> no authentication required.</p>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span></div>
+        </div>
+
+        <!-- GET /plans/:slug -->
+        <span class="section-anchor" id="plan-detail"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/plans/<span class="param">:slug</span></span></div>
+          <p class="endpoint-description">Return a single plan by its slug (e.g. <code>pro</code>, <code>starter</code>). <strong>Public endpoint.</strong></p>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">404 Not found</span></div>
+        </div>
+
+        <!-- POST /subscriptions -->
+        <span class="section-anchor" id="subscribe"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--post">POST</span><span class="endpoint-path">/subscriptions</span></div>
+          <p class="endpoint-description">Subscribe to a plan. Immediately grants <code>creditsPerCycle</code> to the user. Only one active subscription is allowed at a time upgrading replaces the current plan.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="sub-body">Request body <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="sub-body">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">planId</td><td class="col-type">string</td><td class="col-required"><span class="req">required</span></td><td class="col-desc">MongoDB ObjectId of the plan to subscribe to</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">201 Created</span><span class="chip chip--4xx">400 Validation error</span><span class="chip chip--4xx">401 Unauthorized</span><span class="chip chip--4xx">404 Plan not found</span></div>
+        </div>
+
+        <!-- GET /subscriptions/current -->
+        <span class="section-anchor" id="current"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/subscriptions/current</span></div>
+          <p class="endpoint-description">Return the authenticated user's current active subscription, including the nested plan details.</p>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span><span class="chip chip--4xx">404 No active subscription</span></div>
+        </div>
+
+        <!-- POST /subscriptions/cancel -->
+        <span class="section-anchor" id="cancel"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--post">POST</span><span class="endpoint-path">/subscriptions/cancel</span></div>
+          <p class="endpoint-description">Cancel the current subscription at the end of the billing period. Access continues until <code>currentPeriodEnd</code>. Sets <code>cancelAtPeriodEnd: true</code>.</p>
+          <div class="callout">Cancellation is immediate in terms of future renewals it does not terminate access early. Downgrading to Free happens automatically at period end.</div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span><span class="chip chip--4xx">404 No active subscription</span></div>
+        </div>
+
+      </main>
+      <aside class="right-rail" aria-label="Code examples">
+        <div class="rail-section">
+          <span class="rail-label">GET /plans response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">[
+  {
+    "_id": "665f1db73999b015e58749a0",
+    "name": "Pro",
+    "slug": "pro",
+    "price": 2900,
+    "currency": "USD",
+    "billingCycle": "monthly",
+    "creditsPerCycle": 2000,
+    "features": {
+      "maxApiKeys": 10,
+      "maxConversations": -1,
+      "maxMessagesPerDay": -1,
+      "priorityQueue": true,
+      "analyticsRetentionDays": 90
+    },
+    "isActive": true
+  }
+]</code></pre></div></div>
+        </div>
+        <div class="rail-section">
+          <span class="rail-label">GET /subscriptions/current response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "_id": "...",
+    "status": "active",
+    "currentPeriodStart": "2024-06-01T00:00:00.000Z",
+    "currentPeriodEnd": "2024-07-01T00:00:00.000Z",
+    "cancelAtPeriodEnd": false,
+    "plan": {
+      "name": "Pro",
+      "slug": "pro",
+      "creditsPerCycle": 2000
+    }
+  }
+}</code></pre></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <footer class="site-footer" role="contentinfo"><span>NexusAI · v1.0.0 · MIT License</span><div style="display:flex;gap:16px;"><a href="https://github.com/Deanity/NexusAI-SaaS-Expres" target="_blank" rel="noopener noreferrer">GitHub</a><a href="../index.html">Overview</a></div></footer>
+  <script src="../js/copy.js"></script><script src="../js/nav.js"></script><script src="../js/search.js"></script>
+</body>
+</html>

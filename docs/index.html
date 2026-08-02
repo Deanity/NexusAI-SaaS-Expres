@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusAI API Reference</title>
+  <meta name="description" content="Complete API reference for NexusAI authentication, AI chat, conversation history, credits, API key management, subscriptions, and analytics." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Highlight.js (CDN, pinned version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/google-light.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP NAV
+  ======================================================== -->
+  <header class="topbar" role="banner">
+    <a href="index.html" class="topbar__logo" aria-label="NexusAI Docs home">
+      <span class="topbar__logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2h4v4H2V2zm6 0h4v4H8V2zm0 6h4v4H8V8zm-6 0h4v4H2V8z" fill="white"/>
+        </svg>
+      </span>
+      NexusAI Docs
+    </a>
+
+    <div class="topbar__right">
+      <span class="topbar__version">v1.0.0</span>
+      <a href="https://github.com/Deanity/NexusAI-SaaS-Expres" class="btn btn--ghost btn--sm" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       LANDING ROOT (no sidebar)
+  ======================================================== -->
+  <main class="landing-root" id="main">
+
+    <!-- Hero -->
+    <section class="landing-hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="text-display">NexusAI API Reference</h1>
+      <p class="landing-hero__subtitle">
+        A production-ready AI SaaS backend multi-model chat, conversation history, credit billing, API key management, and usage analytics. Base URL: <code>https://api.nexusai.dev/api/v1</code>
+      </p>
+      <div class="btn-group">
+        <a href="pages/auth.html" class="btn btn--primary">Get started</a>
+        <a href="https://github.com/Deanity/NexusAI-SaaS-Expres" class="btn btn--secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      </div>
+    </section>
+
+    <!-- Base URL -->
+    <section class="landing-section" aria-label="Base URL">
+      <h2 class="text-subhead">Base URL</h2>
+      <div class="base-url-panel">
+        <code class="base-url-text">https://api.nexusai.dev/api/v1</code>
+        <button class="btn btn--ghost btn--sm base-url-copy" aria-label="Copy base URL">Copy</button>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--color-text-secondary);">
+        All endpoints are prefixed with this URL. Requests must include <code>Authorization: Bearer &lt;token&gt;</code> unless noted as public.
+      </p>
+    </section>
+
+    <!-- Quick Start -->
+    <section class="landing-section" aria-labelledby="quickstart-title">
+      <h2 id="quickstart-title" class="text-subhead">Quick start</h2>
+      <div class="quickstart-steps">
+
+        <div class="quickstart-step">
+          <div class="quickstart-step__header">
+            <span class="quickstart-step__num">1</span>
+            <span class="quickstart-step__title">Register an account</span>
+          </div>
+          <div class="code-block">
+            <div class="code-block__header">
+              <span class="code-block__label">request</span>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span class="code-block__lang">bash</span>
+                <button class="code-block__copy" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+            <div class="code-block__body">
+              <pre><code class="language-bash">curl -X POST https://api.nexusai.dev/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Jane Dev",
+    "email": "jane@example.com",
+    "password": "SecurePass1"
+  }'</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="quickstart-step">
+          <div class="quickstart-step__header">
+            <span class="quickstart-step__num">2</span>
+            <span class="quickstart-step__title">Log in and get your access token</span>
+          </div>
+          <div class="code-block">
+            <div class="code-block__header">
+              <span class="code-block__label">request</span>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span class="code-block__lang">bash</span>
+                <button class="code-block__copy" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+            <div class="code-block__body">
+              <pre><code class="language-bash">curl -X POST https://api.nexusai.dev/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane@example.com",
+    "password": "SecurePass1"
+  }'</code></pre>
+            </div>
+          </div>
+          <div class="code-block" style="margin-top:8px;">
+            <div class="code-block__header">
+              <span class="code-block__label">response</span>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span class="code-block__lang">json</span>
+                <button class="code-block__copy" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+            <div class="code-block__body">
+              <pre><code class="language-json">{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="quickstart-step">
+          <div class="quickstart-step__header">
+            <span class="quickstart-step__num">3</span>
+            <span class="quickstart-step__title">Send your first AI chat message</span>
+          </div>
+          <div class="code-block">
+            <div class="code-block__header">
+              <span class="code-block__label">request</span>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span class="code-block__lang">bash</span>
+                <button class="code-block__copy" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+            <div class="code-block__body">
+              <pre><code class="language-bash">curl -X POST https://api.nexusai.dev/api/v1/ai/chat \
+  -H "Authorization: Bearer &lt;your_access_token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-1.5-flash",
+    "message": "Hello! What can you help me with?"
+  }'</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Module Grid -->
+    <section class="landing-section" aria-labelledby="modules-title">
+      <h2 id="modules-title" class="text-subhead">API Modules</h2>
+      <div class="module-grid">
+
+        <a href="pages/auth.html" class="module-card">
+          <span class="module-card__name">Authentication</span>
+          <span class="module-card__desc">Register, login, token refresh, logout, email verification, and password reset.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--post" aria-label="POST">POST</span>
+          </div>
+        </a>
+
+        <a href="pages/user.html" class="module-card">
+          <span class="module-card__name">User</span>
+          <span class="module-card__desc">View and update your profile, change your password, or delete your account.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+            <span class="badge badge--patch" aria-label="PATCH">PATCH</span>
+            <span class="badge badge--delete" aria-label="DELETE">DELETE</span>
+          </div>
+        </a>
+
+        <a href="pages/ai.html" class="module-card">
+          <span class="module-card__name">AI Chat</span>
+          <span class="module-card__desc">Multi-model AI chat with Gemini 1.5 Pro/Flash. Supports streaming via SSE.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--post" aria-label="POST">POST</span>
+          </div>
+        </a>
+
+        <a href="pages/conversation.html" class="module-card">
+          <span class="module-card__name">Conversation</span>
+          <span class="module-card__desc">Full CRUD for conversation history. Paginated messages, pin, archive, and clear.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+            <span class="badge badge--post" aria-label="POST">POST</span>
+            <span class="badge badge--patch" aria-label="PATCH">PATCH</span>
+            <span class="badge badge--delete" aria-label="DELETE">DELETE</span>
+          </div>
+        </a>
+
+        <a href="pages/credit.html" class="module-card">
+          <span class="module-card__name">Credits</span>
+          <span class="module-card__desc">Check balance, browse ledger history, and purchase additional credits.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+            <span class="badge badge--post" aria-label="POST">POST</span>
+          </div>
+        </a>
+
+        <a href="pages/api-keys.html" class="module-card">
+          <span class="module-card__name">API Keys</span>
+          <span class="module-card__desc">Create, manage, and rotate API keys with granular scope control.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+            <span class="badge badge--post" aria-label="POST">POST</span>
+            <span class="badge badge--patch" aria-label="PATCH">PATCH</span>
+            <span class="badge badge--delete" aria-label="DELETE">DELETE</span>
+          </div>
+        </a>
+
+        <a href="pages/subscription.html" class="module-card">
+          <span class="module-card__name">Subscriptions</span>
+          <span class="module-card__desc">Browse plans, subscribe, view your current plan, and cancel anytime.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+            <span class="badge badge--post" aria-label="POST">POST</span>
+          </div>
+        </a>
+
+        <a href="pages/analytics.html" class="module-card">
+          <span class="module-card__name">Analytics</span>
+          <span class="module-card__desc">Usage overview, daily breakdowns, model usage, and per-key stats.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+          </div>
+        </a>
+
+        <a href="pages/admin.html" class="module-card">
+          <span class="module-card__name">Admin</span>
+          <span class="module-card__desc">User management, manual credit adjustments, plan management, and platform analytics. Requires <code>role: admin</code>.</span>
+          <div class="module-card__badges">
+            <span class="badge badge--get" aria-label="GET">GET</span>
+            <span class="badge badge--post" aria-label="POST">POST</span>
+            <span class="badge badge--patch" aria-label="PATCH">PATCH</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Authentication note -->
+    <section class="landing-section" aria-labelledby="auth-note-title">
+      <h2 id="auth-note-title" class="text-subhead">Authentication</h2>
+      <p class="text-body" style="margin-bottom:12px;">
+        NexusAI uses JWT access tokens (15-minute expiry) delivered in the response body, and refresh tokens (7-day expiry) stored as <code>httpOnly</code> cookies. Send the access token in every authenticated request:
+      </p>
+      <div class="code-block">
+        <div class="code-block__header">
+          <span class="code-block__label">header</span>
+          <button class="code-block__copy" aria-label="Copy to clipboard">Copy</button>
+        </div>
+        <div class="code-block__body">
+          <pre><code class="language-bash">Authorization: Bearer &lt;access_token&gt;</code></pre>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--color-text-secondary);">
+        You can also authenticate using API keys via the <code>x-api-key</code> header see the <a href="pages/api-keys.html">API Keys</a> module.
+      </p>
+    </section>
+
+    <!-- Response format -->
+    <section class="landing-section" aria-labelledby="response-title">
+      <h2 id="response-title" class="text-subhead">Response format</h2>
+      <p class="text-body" style="margin-bottom:12px;">All endpoints return a consistent JSON envelope:</p>
+      <div class="code-block">
+        <div class="code-block__header">
+          <span class="code-block__label">shape</span>
+          <button class="code-block__copy" aria-label="Copy to clipboard">Copy</button>
+        </div>
+        <div class="code-block__body">
+          <pre><code class="language-json">{
+  "success": true,
+  "message": "Human-readable message",
+  "data": null,
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "totalPages": 5
+  }
+}</code></pre>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--color-text-secondary);">
+        <code>meta</code> is only present on paginated list endpoints. <code>data</code> is <code>null</code> on error responses.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <span>NexusAI · v1.0.0 · MIT License</span>
+    <div style="display:flex;gap:16px;">
+      <a href="https://github.com/Deanity/NexusAI-SaaS-Expres" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="pages/auth.html">API Reference</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/copy.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics NexusAI API Reference</title>
+  <meta name="description" content="NexusAI Analytics API usage overview, daily breakdowns, model usage, and per-key stats." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/google-light.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <link rel="stylesheet" href="../css/tokens.css" /><link rel="stylesheet" href="../css/base.css" /><link rel="stylesheet" href="../css/layout.css" /><link rel="stylesheet" href="../css/components.css" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <a href="../index.html" class="topbar__logo" aria-label="NexusAI Docs home"><span class="topbar__logo-mark" aria-hidden="true"><svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h4v4H2V2zm6 0h4v4H8V2zm0 6h4v4H8V8zm-6 0h4v4H2V8z" fill="white"/></svg></span>NexusAI Docs</a>
+    <div class="topbar__right"><span class="topbar__version">v1.0.0</span><a href="https://github.com/Deanity/NexusAI-SaaS-Expres" class="btn btn--ghost btn--sm" target="_blank" rel="noopener noreferrer">GitHub</a><button class="topbar__hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div>
+  </header>
+  <div class="doc-root">
+    <nav class="sidebar" id="sidebar" aria-label="API documentation navigation">
+      <div class="sidebar__inner">
+        <div class="sidebar__search"><div class="search-box" role="search"><input type="search" class="search-box__input" placeholder="search endpoints" aria-label="Search endpoints" id="search-input" autocomplete="off" /><span class="search-box__kbd" aria-hidden="true">⌘K</span><div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div></div></div>
+        <div class="nav-group"><span class="nav-group__label">Overview</span><a href="../index.html" class="nav-item">Getting started</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Auth</span><a href="auth.html#register" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> register</a><a href="auth.html#login" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> login</a><a href="auth.html#refresh" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> refresh</a><a href="auth.html#logout" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> logout</a><a href="auth.html#verify-email" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> verify email</a><a href="auth.html#forgot-password" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> forgot password</a><a href="auth.html#reset-password" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> reset password</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">User</span><a href="user.html#me" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> profile</a><a href="user.html#update-me" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="user.html#change-password" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> password</a><a href="user.html#delete-me" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> delete</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">AI Chat</span><a href="ai.html#chat" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> chat</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Conversation</span><a href="conversation.html#list" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> list</a><a href="conversation.html#create" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> create</a><a href="conversation.html#get" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> get</a><a href="conversation.html#update" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="conversation.html#archive" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> archive</a><a href="conversation.html#messages" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> messages</a><a href="conversation.html#clear-messages" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> clear messages</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Credit</span><a href="credit.html#balance" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> balance</a><a href="credit.html#history" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> history</a><a href="credit.html#purchase" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> purchase</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">API Keys</span><a href="api-keys.html#list" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> list</a><a href="api-keys.html#create" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> create</a><a href="api-keys.html#update" class="nav-item"><span class="nav-item__badge badge badge--patch">PATCH</span> update</a><a href="api-keys.html#revoke" class="nav-item"><span class="nav-item__badge badge badge--delete">DELETE</span> revoke</a><a href="api-keys.html#rotate" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> rotate</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Subscription</span><a href="subscription.html#plans" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> plans</a><a href="subscription.html#subscribe" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> subscribe</a><a href="subscription.html#current" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> current</a><a href="subscription.html#cancel" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> cancel</a></div>
+        <div class="nav-divider"></div>
+        <div class="nav-group">
+          <span class="nav-group__label">Analytics</span>
+          <a href="analytics.html#overview" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> overview</a>
+          <a href="analytics.html#daily" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> daily</a>
+          <a href="analytics.html#models" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> models</a>
+          <a href="analytics.html#api-keys" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> api keys</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-group"><span class="nav-group__label">Admin</span><a href="admin.html#users" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> users</a><a href="admin.html#credits-adjust" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> credits</a><a href="admin.html#create-plan" class="nav-item"><span class="nav-item__badge badge badge--post">POST</span> plans</a><a href="admin.html#analytics-overview" class="nav-item"><span class="nav-item__badge badge badge--get">GET</span> analytics</a></div>
+      </div>
+    </nav>
+    <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+    <div class="doc-main">
+      <main class="content-area" id="main">
+        <h1 class="text-module-title">Analytics</h1>
+        <p class="text-body" style="margin-bottom:var(--space-2);">Usage statistics aggregated from the <code>UsageEvent</code> collection. All endpoints require <code>analytics:read</code> scope when using API keys. Heavy aggregations are cached in Redis for 10 minutes.</p>
+
+        <!-- Common query params callout -->
+        <div class="callout">
+          <strong>Common query parameters:</strong> All analytics endpoints accept <code>?from=2024-01-01&to=2024-01-31</code> (ISO 8601 dates). The <code>daily</code> endpoint also accepts <code>&granularity=day|week|month</code>.
+        </div>
+
+        <hr class="endpoint-divider" />
+
+        <!-- GET /analytics/overview -->
+        <span class="section-anchor" id="overview"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/analytics/overview</span></div>
+          <p class="endpoint-description">Return aggregate usage totals for the authenticated user. Includes total messages, tokens, credits used, most-used model, and average latency for the specified period.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="overview-query">Query parameters <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="overview-query">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">from</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Start date, ISO 8601. Defaults to 30 days ago</td></tr>
+                <tr><td class="col-name">to</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">End date, ISO 8601. Defaults to today</td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span></div>
+        </div>
+
+        <!-- GET /analytics/daily -->
+        <span class="section-anchor" id="daily"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/analytics/daily</span></div>
+          <p class="endpoint-description">Return usage data grouped by time bucket. Useful for charting usage over time.</p>
+          <div class="param-section">
+            <button class="param-section__toggle" aria-expanded="true" aria-controls="daily-query">Query parameters <span class="chevron" aria-hidden="true">▾</span></button>
+            <div class="param-section__content is-open" id="daily-query">
+              <table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">from</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">Start date, ISO 8601</td></tr>
+                <tr><td class="col-name">to</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc">End date, ISO 8601</td></tr>
+                <tr><td class="col-name">granularity</td><td class="col-type">string</td><td class="col-required"><span class="opt">optional</span></td><td class="col-desc"><code>day</code> | <code>week</code> | <code>month</code>. Default: <code>day</code></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span></div>
+        </div>
+
+        <!-- GET /analytics/models -->
+        <span class="section-anchor" id="models"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/analytics/models</span></div>
+          <p class="endpoint-description">Return usage broken down by AI model total messages, tokens, and credits per model for the specified period.</p>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span></div>
+        </div>
+
+        <!-- GET /analytics/api-keys -->
+        <span class="section-anchor" id="api-keys"></span>
+        <div class="endpoint-block">
+          <div class="endpoint-header"><span class="badge badge--get">GET</span><span class="endpoint-path">/analytics/api-keys</span></div>
+          <p class="endpoint-description">Return usage statistics per API key request count, tokens, and credits consumed per key. Only keys owned by the authenticated user are returned.</p>
+          <div class="response-chips"><span class="chip chip--2xx">200 OK</span><span class="chip chip--4xx">401 Unauthorized</span></div>
+        </div>
+
+      </main>
+      <aside class="right-rail" aria-label="Code examples">
+        <div class="rail-section">
+          <span class="rail-label">GET /analytics/overview response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "totalMessages": 248,
+    "totalTokensUsed": 48200,
+    "totalCreditsUsed": 96,
+    "mostUsedModel": "gemini-1.5-flash",
+    "averageLatencyMs": 784,
+    "period": {
+      "from": "2024-05-01T00:00:00.000Z",
+      "to": "2024-06-01T00:00:00.000Z"
+    }
+  }
+}</code></pre></div></div>
+        </div>
+        <div class="rail-section">
+          <span class="rail-label">GET /analytics/daily response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">{
+  "success": true,
+  "data": [
+    {"date":"2024-06-01","messages":12,"tokens":2400,"credits":5},
+    {"date":"2024-06-02","messages":8,"tokens":1600,"credits":3},
+    {"date":"2024-06-03","messages":20,"tokens":3900,"credits":8}
+  ]
+}</code></pre></div></div>
+        </div>
+        <div class="rail-section">
+          <span class="rail-label">GET /analytics/models response</span>
+          <div class="code-block"><div class="code-block__header"><span class="code-block__lang">json</span><button class="code-block__copy" aria-label="Copy to clipboard">Copy</button></div>
+          <div class="code-block__body"><pre><code class="language-json">{
+  "success": true,
+  "data": [
+    {"model":"gemini-1.5-flash","messages":200,"tokens":38000,"credits":76},
+    {"model":"gemini-1.5-pro","messages":48,"tokens":10200,"credits":51}
+  ]
+}</code></pre></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <footer class="site-footer" role="contentinfo"><span>NexusAI · v1.0.0 · MIT License</span><div style="display:flex;gap:16px;"><a href="https://github.com/Deanity/NexusAI-SaaS-Expres" target="_blank" rel="noopener noreferrer">GitHub</a><a href="../index.html">Overview</a></div></footer>
+  <script src="../js/copy.js"></script><script src="../js/nav.js"></script><script src="../js/search.js"></script>
+</body>
+</html>

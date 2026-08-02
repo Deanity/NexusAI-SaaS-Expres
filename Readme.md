@@ -1,60 +1,77 @@
-# NexusAI Backend API
+# NexusAI AI SaaS Backend API
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-v20+-green.svg?style=flat-square)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.x-lightgrey.svg?style=flat-square)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg?style=flat-square)](https://www.mongodb.com/)
 [![Redis](https://img.shields.io/badge/Redis-7.x-red.svg?style=flat-square)](https://redis.io/)
-[![Tests](https://img.shields.io/badge/Tests-118%20Passed-green.svg?style=flat-square)](tests/)
-[![Coverage](https://img.shields.io/badge/Coverage-70.6%25-green.svg?style=flat-square)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-118%20Passed-brightgreen.svg?style=flat-square)](tests/)
+[![Coverage](https://img.shields.io/badge/Coverage-70.6%25-brightgreen.svg?style=flat-square)](tests/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
+NexusAI is a **production-ready AI SaaS backend platform** that provides multi-model AI chat, conversation history, credit-based billing, subscription plans, API key management, and usage analytics all through a secure, scalable Node.js/Express REST API.
 
-NexusAI is a production-ready AI SaaS backend platform that provides multi-model AI chat, conversation history, credit-based billing, subscription plans, API key management, and usage analytics through a secure, scalable Node.js/Express REST API.
+---
+
+## 📖 API Documentation
+
+A full static API reference website is included in the `docs/` directory. Open `docs/index.html` directly in your browser no build step required.
+
+![NexusAI API Documentation Preview](image/DocsImage.png)
+
+The documentation covers all 9 API modules with endpoint references, request/response examples, parameter tables, and live copy-to-clipboard code blocks.
+
+> **Modules covered:** Authentication · User · AI Chat · Conversation · Credits · API Keys · Subscriptions · Analytics · Admin
 
 ---
 
 ## 🚀 Key Features
 
-*   **Authentication (JWT + Refresh Token)**: Dual-token system with rotation, device limit verification, and lockout protection (tracked via Redis).
-*   **Role-Based Access Control (RBAC)**: Support for `user` and `admin` roles, along with API key scoping checks.
-*   **Multi-Model AI Chat**: Direct integration with multiple models (Gemini-1.5-pro, Gemini-1.5-flash active by default) using a custom provider router.
-*   **Conversation History**: Paginated, pinned, and soft-delete archive support.
-*   **Credit & Ledger System**: Atomic credit deduction with transaction logging.
-*   **Subscription Architecture**: Tier-based subscription plans, active status lifecycle, and automated credit renewal jobs.
-*   **API Key Management**: Secure SHA-256 hashed API key validation, prefix display, rotation, and usage statistics.
-*   **Usage Analytics**: Advanced user and admin level metrics, rollup calculations, and Redis caching.
-*   **Background Jobs (BullMQ)**: Managed task queues for transactional emails, subscriptions, API key logging, and cleanup tasks.
-*   **Security & Optimization**: Helmet headers, CORS, request compression, Redis sliding window rate-limiting, and cache invalidation rules.
+- **JWT + Refresh Token Auth** Dual-token rotation, device-limit enforcement, and Redis-backed brute-force lockout
+- **Role-Based Access Control (RBAC)** `user` and `admin` roles with API key scope middleware
+- **Multi-Model AI Chat** Gemini 1.5 Pro/Flash active; OpenAI/Anthropic ready to plug in via provider router
+- **Server-Sent Events (SSE)** Real-time token streaming with graceful fallback
+- **Credit & Ledger System** Atomic MongoDB transactions; credits can never go below zero
+- **Subscription Lifecycle** Free → Starter → Pro → Enterprise with BullMQ renewal jobs
+- **API Key Management** SHA-256 hashed keys, prefix-only display, per-key scopes, IP whitelisting, and key rotation
+- **Usage Analytics** Per-user and platform-wide metrics with Redis caching (5–10 min TTL)
+- **Background Jobs (BullMQ)** Transactional email, subscription renewal, API key usage logging, and cleanup queues
+- **Security Layer** Helmet headers, CORS, compression, Redis sliding-window rate limiting
 
 ---
 
 ## 👥 Target Users
 
-*   **Developers**: Need robust API key management, multi-model AI integrations, and detailed usage analytics.
-*   **Startups**: Want a ready-to-use credit-based billing and subscription architecture to launch AI SaaS apps fast.
-*   **Businesses**: Require role-based access control (RBAC), team-level usage control, and audit trails.
-*   **Content Creators**: Need conversation history management, custom prompt settings, and multi-model access.
+| Audience | What they get |
+| :--- | :--- |
+| **Developers** | API key management, multi-model AI integration, usage analytics |
+| **Startups** | Credit billing + subscription architecture out of the box |
+| **Businesses** | RBAC, team-level usage control, audit trails via credit ledger |
+| **Content Creators** | Conversation history, custom system prompts, multi-model access |
 
 ---
 
 ## 🛠️ Tech Stack
 
-*   **Language & Runtime**: TypeScript (Strict Mode) & Node.js (v20+)
-*   **Framework**: Express.js
-*   **Database**: MongoDB (Mongoose ODM)
-*   **Caching & Queue**: Redis (ioredis) & BullMQ
-*   **Validation**: Zod
-*   **Documentation**: Swagger UI (`swagger-jsdoc` + `swagger-ui-express`)
-*   **Testing**: Jest & Supertest
-*   **Containerization**: Docker & Docker Compose
-*   **Package Manager**: `pnpm` (required)
+| Layer | Technology |
+| :--- | :--- |
+| Language & Runtime | TypeScript (strict mode) · Node.js v20+ |
+| Framework | Express.js |
+| Database | MongoDB Atlas (Mongoose ODM) |
+| Cache & Queue | Redis (ioredis) · BullMQ |
+| Validation | Zod |
+| API Docs | Swagger UI (`swagger-jsdoc` + `swagger-ui-express`) |
+| Static Docs Site | Vanilla HTML/CSS/JS zero build pipeline |
+| Testing | Jest · Supertest |
+| Containerization | Docker · Docker Compose |
+| CI/CD | GitHub Actions |
+| Package Manager | pnpm |
 
 ---
 
 ## 📂 Project Structure
 
-The project follows a **Feature-based (Domain-Driven)** architecture:
+Feature-based (Domain-Driven) architecture:
 
 ```
 nexusai-api/
@@ -78,17 +95,15 @@ nexusai-api/
 │   ├── jobs/             # BullMQ job processors (email, analytics)
 │   ├── docs/             # Swagger definitions
 │   └── app.ts            # Express app setup
+├── docs/                 # Static API reference website (open index.html)
 ├── tests/
 │   ├── unit/
 │   └── integration/
 ├── docker/
 │   ├── Dockerfile
 │   └── docker-compose.yml
-├── .github/
-│   └── workflows/
-│       └── ci.yml
+├── .github/workflows/ci.yml
 ├── .env.example
-├── GEMINI.md
 └── package.json
 ```
 
@@ -98,29 +113,20 @@ nexusai-api/
 
 ### Prerequisites
 
-Ensure you have the following installed on your system:
-*   [Node.js](https://nodejs.org/) (v20 or higher)
-*   [pnpm](https://pnpm.io/) package manager
-*   [Docker](https://www.docker.com/) (for running local Redis container)
-*   MongoDB Atlas Account (or local MongoDB database instance)
+- [Node.js](https://nodejs.org/) v20+
+- [pnpm](https://pnpm.io/) package manager
+- [Docker](https://www.docker.com/) (for local Redis)
+- MongoDB Atlas account (or local MongoDB)
 
----
-
-### Step 1: Clone and Install Dependencies
+### 1 Clone & Install
 
 ```bash
-# Clone the repository
 git clone <repository-url>
 cd nexusai
-
-# Install dependencies using pnpm
 pnpm install
 ```
 
-### Step 2: Set Up Services
-
-#### A. Start Redis Container
-Run this command to create and run a background Redis container:
+### 2 Start Redis
 
 ```bash
 docker run -d \
@@ -130,125 +136,100 @@ docker run -d \
   redis:7-alpine redis-server --appendonly yes
 ```
 
-#### B. Setup MongoDB Atlas
-1. Create a free cluster at [cloud.mongodb.com](https://cloud.mongodb.com/).
-2. Create a database user with `readWrite` access permissions on the `nexusai` database.
-3. Whitelist IP access `0.0.0.0/0` (or your specific IP).
-4. Copy the connection string (e.g. `mongodb+srv://...`).
-
----
-
-### Step 3: Configure Environment Variables
-
-Create a `.env` file in the root directory by copying the example environment file:
+### 3 Configure Environment
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and fill in the required values:
-*   `MONGODB_URI`: Your MongoDB Atlas connection string.
-*   `REDIS_URL`: `redis://localhost:6379`
-*   `JWT_ACCESS_SECRET` & `JWT_REFRESH_SECRET`: Random 64-char strings.
-*   `GOOGLE_AI_API_KEY`: Your Google AI SDK API key (for Gemini models).
-*   `RESEND_API_KEY`: Your Resend or SMTP credentials for transactional emails.
+Key variables to fill in:
 
----
+| Variable | Description |
+| :--- | :--- |
+| `MONGODB_URI` | MongoDB Atlas connection string |
+| `REDIS_URL` | `redis://localhost:6379` |
+| `JWT_ACCESS_SECRET` | Random 64-char string |
+| `JWT_REFRESH_SECRET` | Random 64-char string |
+| `GOOGLE_AI_API_KEY` | Google AI (Gemini) API key |
+| `RESEND_API_KEY` | Resend / SMTP credentials |
 
-### Step 4: Run the Application
+### 4 Seed & Run
 
 ```bash
-# Run database seeder (seeds plans, admin user)
-pnpm db:seed
-
-# Start the development server (auto-reload via ts-node-dev)
-pnpm dev
+pnpm db:seed   # Seeds plans and admin user
+pnpm dev       # Start dev server at http://localhost:3000
 ```
-
-The server will start at `http://localhost:3000`.
 
 ---
 
-## 🛠️ Commands Reference
-
-Run these commands in the project root:
+## 🛠️ Commands
 
 ```bash
 # Development
-pnpm dev              # Run dev server with ts-node-dev
-pnpm build            # Compile TypeScript to dist/
+pnpm dev              # Dev server with ts-node-dev (auto-reload)
+pnpm build            # Compile TypeScript → dist/
 pnpm start            # Run compiled production build
 
 # Code Quality
-pnpm lint             # Run ESLint check
-pnpm format           # Run Prettier format
-pnpm typecheck        # Check types (tsc --noEmit)
+pnpm lint             # ESLint check
+pnpm format           # Prettier format
+pnpm typecheck        # tsc --noEmit
 
 # Testing
-pnpm test             # Run all tests
+pnpm test             # All tests
 pnpm test:unit        # Unit tests only
 pnpm test:integration # Integration tests only
-pnpm test:coverage    # Generate test coverage report
+pnpm test:coverage    # Coverage report
 
 # Database
-pnpm db:seed          # Seed initial data (plans, admin user)
+pnpm db:seed          # Seed plans + admin user
 pnpm db:reset         # Drop all collections and re-seed
 
 # Docker
-docker compose up -d            # Start all services inside Docker
-docker compose down             # Stop Docker services
+docker compose up -d            # Start all services
+docker compose down             # Stop all services
 docker compose logs -f api      # Stream API logs
 ```
 
 ---
 
-## 🧪 Testing & Code Coverage
+## 🧪 Testing & Coverage
 
-NexusAI has a comprehensive suite of unit and integration tests using **Jest** and **Supertest** to ensure code reliability and concurrent-safety across all modules.
+118 tests across 16 suites all passing.
 
-### Coverage Targets & Verification
-*   **Overall Coverage Target**: `>70%` statement coverage
-*   **Service-level Coverage Target**: `>90%` statement coverage for all domain service layers (`src/modules/[module]/[module].service.ts`)
+| Module | Statement | Function | Status |
+| :--- | :---: | :---: | :---: |
+| **Overall** | **70.61%** | **58.93%** | ✅ |
+| `admin.service.ts` | 98.42% | 100.00% | ✅ |
+| `ai.service.ts` | 98.88% | 87.50% | ✅ |
+| `analytics.service.ts` | 98.14% | 100.00% | ✅ |
+| `apiKey.service.ts` | 92.00% | 100.00% | ✅ |
+| `auth.service.ts` | 99.40% | 100.00% | ✅ |
+| `conversation.service.ts` | 93.22% | 100.00% | ✅ |
+| `credit.service.ts` | 100.00% | 100.00% | ✅ |
+| `subscription.service.ts` | 90.56% | 100.00% | ✅ |
 
-Currently, **100% of the 16 test suites (118 tests)** are passing with the following coverage metrics:
+**Test isolation:** Each Jest worker gets a unique MongoDB database (`nexusai_test_<id>`) and Redis database index (`JEST_WORKER_ID % 16`). BullMQ processors are disabled during tests.
 
-| Module/Service | Statement Coverage (%) | Function Coverage (%) | Target Status |
-| :--- | :--- | :--- | :--- |
-| **All Files (Overall)** | **70.61%** | **58.93%** | **Passed (>70%)** |
-| `src/modules/admin/admin.service.ts` | 98.42% | 100.00% | Passed (>90%) |
-| `src/modules/ai/ai.service.ts` | 98.88% | 87.50% | Passed (>90%) |
-| `src/modules/analytics/analytics.service.ts` | 98.14% | 100.00% | Passed (>90%) |
-| `src/modules/apikey/apiKey.service.ts` | 92.00% | 100.00% | Passed (>90%) |
-| `src/modules/auth/auth.service.ts` | 99.40% | 100.00% | Passed (>90%) |
-| `src/modules/conversation/conversation.service.ts` | 93.22% | 100.00% | Passed (>90%) |
-| `src/modules/credit/credit.service.ts` | 100.00% | 100.00% | Passed (>90%) |
-| `src/modules/subscription/subscription.service.ts` | 90.56% | 100.00% | Passed (>90%) |
-
-### Running the Tests
-To run all unit and integration tests sequentially with coverage reporting:
 ```bash
 pnpm test:coverage
 ```
 
-### Test Isolation Architecture
-To support running tests concurrently in CI/CD without database collisions or rate limiter collisions:
-1.  **MongoDB Isolation**: The test runner configures a unique database name per Jest worker (e.g. `nexusai_test_1`, `nexusai_test_2`) using the `JEST_WORKER_ID` env variable.
-2.  **Redis Database Isolation**: Each test worker utilizes an isolated Redis database index dynamically computed using modulo arithmetic (`JEST_WORKER_ID % 16`).
-3.  **Background Worker Deactivation**: BullMQ background processors (such as email and subscription renewals) are disabled when running tests to ensure atomic cache flushes do not interfere with test state.
+---
+
+## 📡 Swagger UI
+
+Interactive API explorer available when the server is running:
+
+```
+http://localhost:3000/api/v1/docs
+```
+
+> Set `SWAGGER_ENABLED=true` in production to expose the Swagger UI.
 
 ---
 
-## 📖 API Documentation
-
-Once the server is running, you can access the interactive API Swagger Documentation at:
-
-`http://localhost:3000/api/v1/docs`
-
-> **Note**: Swagger is enabled by default in development mode. In production, ensure `SWAGGER_ENABLED=true` is set in the environment variables.
-
----
-
-## 👥 Credits & Contact
+## 👤 Credits & Contact
 
 <div align="left">
   <a href="https://www.instagram.com/shoyou.nt/" target="_blank">
@@ -268,5 +249,5 @@ Once the server is running, you can access the interactive API Swagger Documenta
 <br/>
 
 <div align="center">
-  <i>"Code is art. Make it beautiful."</i> — De4nity
+  <i>"Code is art. Make it beautiful."</i> De4nity
 </div>

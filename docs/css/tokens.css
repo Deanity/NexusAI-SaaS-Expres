@@ -1,0 +1,155 @@
+/* ============================================================
+   tokens.css NexusAI Docs / NexusStream Design System
+   All design tokens as CSS custom properties.
+   Never hardcode hex values elsewhere always reference these.
+   ============================================================ */
+
+:root {
+   /* --------------------------------------------------
+     Brand
+  -------------------------------------------------- */
+   --color-primary: #78716C;
+   /* Stone links, active nav, focus ring */
+   --color-secondary: #A8A29E;
+   /* Sage dividers, muted icons, inactive nav */
+   --color-tertiary: #1C1917;
+   /* Warm Black headings, emphasis */
+
+   /* --------------------------------------------------
+     Surfaces
+  -------------------------------------------------- */
+   --color-bg: #FAFAF9;
+   /* Page background */
+   --color-surface: #F5F5F4;
+   /* Sidebar, code block bg, section panels */
+   --color-surface-raised: #EFEDEB;
+   /* Hover states, active sidebar item, callouts */
+
+   /* --------------------------------------------------
+     Text
+  -------------------------------------------------- */
+   --color-text-primary: #1C1917;
+   /* Body copy, headings, code text */
+   --color-text-secondary: #57534E;
+   /* Field descriptions, bylines, captions */
+   --color-text-tertiary: #A8A29E;
+   /* Placeholders, disabled labels, punctuation */
+
+   /* --------------------------------------------------
+     Borders
+  -------------------------------------------------- */
+   --color-border-subtle: #E7E5E4;
+   --color-border-medium: #D6D3D1;
+   --color-border-strong: #A8A29E;
+
+   /* --------------------------------------------------
+     HTTP Method Colors
+     Background + Text + Border per method
+  -------------------------------------------------- */
+   --method-get-bg: #F0FDF4;
+   --method-get-text: #166534;
+   --method-get-border: #BBF7D0;
+
+   --method-post-bg: #EFF6FF;
+   --method-post-text: #1D4ED8;
+   --method-post-border: #BFDBFE;
+
+   --method-put-bg: #FFFBEB;
+   --method-put-text: #B45309;
+   --method-put-border: #FDE68A;
+
+   --method-patch-bg: #FAF5FF;
+   --method-patch-text: #7E22CE;
+   --method-patch-border: #E9D5FF;
+
+   --method-delete-bg: #FEF2F2;
+   --method-delete-text: #DC2626;
+   --method-delete-border: #FECACA;
+
+   /* --------------------------------------------------
+     Semantic Colors (status codes & states)
+  -------------------------------------------------- */
+   --color-success: #65A30D;
+   /* 2xx, healthy indicators */
+   --color-warning: #CA8A04;
+   /* 4xx, rate-limit notices */
+   --color-error: #DC2626;
+   /* 5xx, auth failures */
+   --color-info: #78716C;
+   /* 3xx, informational notes */
+
+   /* Status chip backgrounds */
+   --chip-2xx-bg: #F0FDF4;
+   --chip-2xx-text: #166534;
+   --chip-2xx-border: #BBF7D0;
+
+   --chip-3xx-bg: #F5F5F4;
+   --chip-3xx-text: #78716C;
+   --chip-3xx-border: #E7E5E4;
+
+   --chip-4xx-bg: #FEFCE8;
+   --chip-4xx-text: #CA8A04;
+   --chip-4xx-border: #FEF08A;
+
+   --chip-5xx-bg: #FEF2F2;
+   --chip-5xx-text: #DC2626;
+   --chip-5xx-border: #FECACA;
+
+   /* --------------------------------------------------
+     Spacing Scale (base unit: 12px)
+  -------------------------------------------------- */
+   --space-1: 12px;
+   --space-2: 24px;
+   --space-3: 36px;
+   --space-4: 48px;
+   --space-5: 60px;
+   --space-6: 72px;
+
+   /* Component padding shortcuts */
+   --pad-sm: var(--space-1);
+   /* 12px */
+   --pad-md: var(--space-2);
+   /* 24px */
+   --pad-lg: var(--space-3);
+   /* 36px */
+
+   /* --------------------------------------------------
+     Layout Dimensions
+  -------------------------------------------------- */
+   --sidebar-width: 240px;
+   --content-max: 720px;
+   --rail-width: 380px;
+   --topbar-height: 56px;
+
+   /* --------------------------------------------------
+     Typography Font Stacks
+  -------------------------------------------------- */
+   --font-serif: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+   --font-sans: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+   --font-mono: 'Source Code Pro', 'Fira Code', Consolas, 'Courier New', monospace;
+
+   /* --------------------------------------------------
+     Border Radius
+     Sharp everywhere this is non-negotiable.
+     Only avatars use --radius-full.
+  -------------------------------------------------- */
+   --radius: 0px;
+   --radius-full: 9999px;
+
+   /* --------------------------------------------------
+     Shadows NONE. All flat.
+     Surfaces are separated by border + tint only.
+  -------------------------------------------------- */
+   --shadow-none: none;
+
+   /* --------------------------------------------------
+     Focus Ring
+  -------------------------------------------------- */
+   --focus-ring: 0 0 0 2px #FAFAF9, 0 0 0 4px #78716C;
+
+   /* --------------------------------------------------
+     Transition
+  -------------------------------------------------- */
+   --transition-fast: 120ms ease;
+   --transition-base: 200ms ease;
+}
